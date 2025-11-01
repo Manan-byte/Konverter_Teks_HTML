@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-R">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konverter Teks Biasa ke HTML</title>
+    <title>Konverter Teks Biasa ke HTML (dengan AI)</title>
     <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Menambahkan Google Font "Inter" -->
@@ -59,7 +59,7 @@
 
     <!-- Kontainer utama aplikasi -->
     <div class="bg-slate-800 p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-6xl"> 
-        <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML</h1>
+        <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML (dengan AI)</h1>
         <p class="text-center text-slate-400 mb-8">Tulis atau tempel teks biasa di editor kiri. Kode HTML akan otomatis dibuat di sebelah kanan.</p>
 
         <!-- Grid untuk input dan output -->
@@ -319,16 +319,18 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 alertModal.classList.add('hidden');
             });
 
-            // --- BARU: Fungsi API Gemini ---
-            const API_KEY = ""; // Biarkan kosong, akan diisi oleh environment
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+            // --- DIPERBARUI: Fungsi API Gemini ---
+
+            // URL API tidak lagi diperlukan di sini, kita akan memanggil fungsi Netlify kita
+            // const API_KEY = ""; // TIDAK PERLU
+            // const API_URL = ... // TIDAK PERLU
 
             /**
-             * Melakukan fetch ke API dengan exponential backoff
+             * Melakukan fetch ke Netlify Function kita dengan exponential backoff
              */
-            async function fetchWithBackoff(apiUrl, payload, retries = 3, delay = 1000) {
+            async function fetchWithBackoff(netlifyFunctionUrl, payload, retries = 3, delay = 1000) {
                 try {
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch(netlifyFunctionUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -338,17 +340,24 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                         // Jika 429 (Too Many Requests) dan masih ada percobaan, coba lagi
                         if (response.status === 429 && retries > 0) {
                             await new Promise(resolve => setTimeout(resolve, delay));
-                            return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
+                            return fetchWithBackoff(netlifyFunctionUrl, payload, retries - 1, delay * 2);
                         }
-                        // Untuk error lain, langsung lemparkan
-                        throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+                        // Untuk error lain, coba parse body untuk pesan error
+                        let errorMsg = `HTTP error! status: ${response.status} ${response.statusText}`;
+                        try {
+                            const errBody = await response.json();
+                            if(errBody.error) errorMsg = errBody.error;
+                        } catch(e) {
+                            // biarkan errorMsg default
+                        }
+                        throw new Error(errorMsg);
                     }
-                    return response.json();
+                    return response.json(); // Netlify function kita akan mengembalikan { text: "..." }
                 } catch (error) {
                     // Coba lagi untuk network error atau error lainnya jika masih ada percobaan
                     if (retries > 0) {
                         await new Promise(resolve => setTimeout(resolve, delay));
-                        return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
+                        return fetchWithBackoff(netlifyFunctionUrl, payload, retries - 1, delay * 2);
                     }
                     console.error("Gagal melakukan fetch setelah beberapa kali percobaan:", error);
                     throw error; // Lemparkan error setelah gagal
@@ -356,30 +365,31 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             }
 
             /**
-             * Memanggil API Gemini dengan prompt yang diberikan
+             * Memanggil API Gemini melalui Netlify Function
              */
             async function callGemini(prompt, systemInstruction) {
                 loadingModal.classList.remove('hidden');
                 continueBtn.disabled = true;
                 summarizeBtn.disabled = true;
 
+                // Payload ini akan dikirim ke Netlify Function kita
                 const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: {
-                        parts: [{ text: systemInstruction }]
-                    }
+                    prompt: prompt,
+                    systemInstruction: systemInstruction
                 };
 
                 try {
-                    const result = await fetchWithBackoff(API_URL, payload);
-                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    // Panggil Netlify Function kita
+                    const result = await fetchWithBackoff("/.netlify/functions/gemini-proxy", payload);
+                    
+                    const text = result.text; // Dapatkan teks dari respons function
                     
                     if (!text) {
                         throw new Error("Tidak ada konten yang diterima dari API.");
                     }
                     return text;
                 } catch (error) {
-                    console.error("Error memanggil Gemini API:", error);
+                    console.error("Error memanggil Netlify Function:", error);
                     showAlert(`Terjadi kesalahan saat menghubungi AI: ${error.message}`);
                     return null; // Kembalikan null jika gagal
                 } finally {
@@ -503,7 +513,7 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 tabPreviewBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
                 
                 tabKodeBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400'); // Perbaikan typo 4s00 -> 400
+                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
             });
 
         });
