@@ -3,682 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abiem Trans - Agen Travel Modern & Menyenangkan</title>
-    
-    <!-- SEO & Meta Tags for Social Sharing -->
-    <meta name="description" content="Perjalanan seru dan bebas ribet bersama Abiem Trans. Kami menyediakan layanan travel, carter, pariwisata, dan tour dengan armada nyaman dan driver profesional.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://travelabiemtrans.netlify.app/">
-    <meta property="og:title" content="Abiem Trans - Agen Travel Modern & Menyenangkan">
-    <meta property="og:description" content="Perjalanan seru dan bebas ribet bersama Abiem Trans. Kami menyediakan layanan travel, carter, pariwisata, dan tour dengan armada nyaman dan driver profesional.">
-    <meta property="og:image" content="https://www.asuransiku.id/support/images/upload-photos/article/artikel3-bisnis-travel-besar.png?w=650">
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://travelabiemtrans.netlify.app/">
-    <meta property="twitter:title" content="Abiem Trans - Agen Travel Modern & Menyenangkan">
-    <meta property="twitter:description" content="Perjalanan seru dan bebas ribet bersama Abiem Trans. Kami menyediakan layanan travel, carter, pariwisata, dan tour dengan armada nyaman dan driver profesional.">
-    <meta property="twitter:image" content="https://www.asuransiku.id/support/images/upload-photos/article/artikel3-bisnis-travel-besar.png?w=650">
-
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Ccircle fill='%230891B2' cx='32' cy='32' r='32'/%3E%3Cpath d='M50 42H14c-1.1 0-2-.9-2-2v-8c0-4.42 3.58-8 8-8h20c4.42 0 8 3.58 8 8v8c0 1.1-.9 2-2 2z' fill='%23FFF'/%3E%3Cpath d='M44 24h-24c-2.21 0-4-1.79-4-4v-2c0-2.21 1.79-4 4-4h24c2.21 0 4 1.79 4 4v2c0 2.21-1.79 4-4 4z' fill='%23CFFAFE'/%3E%3Crect fill='%23FFF' x='18' y='16' width='28' height='8' rx='2'/%3E%3Ccircle fill='%231F2937' cx='20' cy='42' r='6'/%3E%3Ccircle fill='%23FFF' cx='20' cy='42' r='2'/%3E%3Ccircle fill='%231F2937' cx='44' cy='42' r='6'/%3E%3Ccircle fill='%23FFF' cx='44' cy='42' r='2'/%3E%3C/g%3E%3C/svg%3E">
+    <title>Konverter Teks Biasa ke HTML</title>
+    <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Menambahkan Google Font "Inter" -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playpen+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
+        /* Kustomisasi scrollbar - SEKARANG MENGGUNAKAN WARNA SLATE */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #1e293b; /* bg-slate-800 */
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #475569; /* bg-slate-600 */
+            border-radius: 4px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #64748b; /* bg-slate-500 */
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F0F9FF; /* light blue bg */
         }
-        .font-brand {
-            font-family: 'Playpen Sans', cursive;
+        /* Style untuk link di dalam tab preview */
+        #tabPreview a {
+            color: #0891b2; /* text-cyan-600 */
+            text-decoration: underline;
         }
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .scroll-animate {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .scroll-animate.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .hero-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230E7490' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .prose ul { list-style-type: none; padding-left: 0; }
-        .prose li { padding-left: 2em; position: relative; margin-bottom: 1em; }
-        .prose li::before { content: '✈️'; position: absolute; left: 0; top: 0.1em; }
-        .prose strong { font-weight: 600; color: #0891B2; /* Cyan-600 */ }
-
-        #van-illustration { animation: bobbing 4s ease-in-out infinite; }
-
-        @keyframes bobbing {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(1deg); }
-        }
-
-        .polaroid {
-            position: absolute;
-            background: white;
-            padding: 0.75rem;
-            padding-bottom: 2.5rem;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            border-radius: 0.25rem;
-            animation: float 10s ease-in-out infinite;
-            z-index: 0;
-        }
-        .polaroid img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(-5deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0px) rotate(-5deg); }
-        }
-
+        /* BARU: Style untuk format markdown di preview */
+        #tabPreview strong { font-weight: bold; }
+        #tabPreview em { font-style: italic; }
+        #tabPreview s { text-decoration: line-through; }
     </style>
 </head>
-<body class="text-slate-800">
+<!-- PERUBAHAN: Menggunakan palet warna 'slate' yang lebih modern -->
+<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Header / Navigation -->
-    <header class="glassmorphism sticky top-0 z-50">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
-                 <svg class="h-10 w-10 text-cyan-600" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#0891B2" cx="32" cy="32" r="32"/><path d="M50 42H14c-1.1 0-2-.9-2-2v-8c0-4.42 3.58-8 8-8h20c4.42 0 8 3.58 8 8v8c0 1.1-.9 2-2 2z" fill="#FFF"/><path d="M44 24h-24c-2.21 0-4-1.79-4-4v-2c0-2.21 1.79-4 4-4h24c2.21 0 4 1.79 4 4v2c0 2.21-1.79 4-4 4z" fill="#CFFAFE"/><rect fill="#FFF" x="18" y="16" width="28" height="8" rx="2"/><circle fill="#1F2937" cx="20" cy="42" r="6"/><circle fill="#FFF" cx="20" cy="42" r="2"/><circle fill="#1F2937" cx="44" cy="42" r="6"/><circle fill="#FFF" cx="44" cy="42" r="2"/></g></svg>
-                 <span class="text-2xl font-bold text-cyan-700 font-brand">Abiem Trans</span>
-            </a>
-            <div class="hidden md:flex space-x-8 items-center font-medium">
-                <a href="#tentang" class="text-slate-600 hover:text-cyan-600 transition duration-300">Tentang</a>
-                <a href="#layanan" class="text-slate-600 hover:text-cyan-600 transition duration-300">Layanan</a>
-                <a href="#armada" class="text-slate-600 hover:text-cyan-600 transition duration-300">Armada</a>
-                <a href="#rute" class="text-slate-600 hover:text-cyan-600 transition duration-300">Rute</a>
-                <a href="#kontak" class="bg-cyan-500 text-white px-5 py-2 rounded-full hover:bg-cyan-600 transition duration-300 shadow-md shadow-cyan-500/20">Hubungi Kami</a>
-            </div>
-            <button id="mobile-menu-button" class="md:hidden text-slate-600">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
-            </button>
-        </nav>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#tentang" class="block py-2 text-slate-600 hover:text-cyan-600">Tentang Kami</a>
-            <a href="#layanan" class="block py-2 text-slate-600 hover:text-cyan-600">Layanan</a>
-            <a href="#armada" class="block py-2 text-slate-600 hover:text-cyan-600">Armada</a>
-            <a href="#rute" class="block py-2 text-slate-600 hover:text-cyan-600">Rute</a>
-            <a href="#kontak" class="block mt-2 bg-cyan-500 text-white text-center px-4 py-2 rounded-full hover:bg-cyan-600">Hubungi Kami</a>
-        </div>
-    </header>
+    <!-- Kontainer utama aplikasi -->
+    <div class="bg-slate-800 p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-6xl"> 
+        <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML</h1>
+        <p class="text-center text-slate-400 mb-8">Tulis atau tempel teks biasa di editor kiri. Kode HTML akan otomatis dibuat di sebelah kanan.</p>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section class="relative pt-24 pb-20 md:pt-28 md:pb-28 overflow-hidden bg-gradient-to-br from-cyan-50 via-rose-50 to-amber-50">
-            <!-- Decorative Photos -->
-            <div class="hidden lg:block">
-                <div class="polaroid w-40 top-20 left-10 transform -rotate-12">
-                     <img src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=400&auto=format&fit=crop" alt="Pemandangan gunung">
-                </div>
-                 <div class="polaroid w-32 bottom-24 left-1/4 transform rotate-6" style="animation-delay: 2s;">
-                     <img src="https://images.unsplash.com/photo-1507525428034-b723a996f6ea?w=400&auto=format&fit=crop" alt="Pantai tropis">
-                </div>
-                 <div class="polaroid w-48 top-24 right-10 transform rotate-12" style="animation-delay: 4s;">
-                    <img src="https://images.unsplash.com/photo-1480714378408-6824e4d758b5?w=400&auto=format&fit=crop" alt="Pemandangan kota di malam hari">
-                </div>
-                <div class="polaroid w-36 bottom-20 right-1/4 transform -rotate-8" style="animation-delay: 6s;">
-                    <img src="https://images.unsplash.com/photo-1511527661048-75a5d022d222?w=400&auto=format&fit=crop" alt="Jalanan kota yang sibuk">
-                </div>
-                 <div class="polaroid w-32 top-10 right-1/3 transform rotate-10" style="animation-delay: 1s;">
-                    <img src="https://images.unsplash.com/photo-1522878129833-23f99a589d82?w=400&auto=format&fit=crop" alt="Orang bahagia saat travelling">
-                </div>
-                 <div class="polaroid w-36 bottom-40 left-5 transform rotate-3" style="animation-delay: 5s;">
-                    <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400&auto=format&fit=crop" alt="Danau yang indah">
-                </div>
-            </div>
+        <!-- Grid untuk input dan output -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <div class="container mx-auto px-6 relative z-10 text-center">
-                 <div class="scroll-animate">
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight">
-                        <span class="font-brand text-cyan-600">Jalan-Jalan Asyik,</span> Tanpa Bikin Pusing!
-                    </h1>
-                    <p class="mt-6 text-lg text-slate-600 max-w-2xl mx-auto">
-                        Biarkan Abiem Trans jadi teman petualanganmu. Kami antar kamu ke destinasi impian dengan nyaman, aman, dan pastinya penuh senyuman.
-                    </p>
-                    <a href="#kontak" class="mt-8 inline-block bg-pink-500 text-white font-bold px-8 py-4 rounded-full text-lg shadow-xl shadow-pink-500/30 hover:bg-pink-600 transform hover:scale-105 transition duration-300">
-                        Pesan Perjalananmu ✨
-                    </a>
-                </div>
-                <div class="relative mt-12 scroll-animate" style="animation-delay: 0.2s;">
-                    <div id="van-illustration" class="w-full max-w-xs sm:max-w-sm mx-auto">
-                        <!-- Ilustrasi Sederhana dan Kecil -->
-                        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10,110 H190" stroke="#94a3b8" stroke-width="4" stroke-linecap="round" />
-                            <path d="M30,50 C30,30 50,30 60,30 L140,30 C150,30 170,30 170,50 L170,100 L30,100 Z" fill="#22D3EE" stroke="#0891B2" stroke-width="3" />
-                            <rect x="90" y="50" width="65" height="40" fill="#F0F9FF" rx="5" />
-                            <rect x="45" y="50" width="30" height="40" fill="#F0F9FF" rx="5" />
-                            <circle cx="55" cy="100" r="12" fill="#334155" />
-                            <circle cx="55" cy="100" r="6" fill="#F8FAFC" />
-                            <circle cx="145" cy="100" r="12" fill="#334155" />
-                            <circle cx="145" cy="100" r="6" fill="#F8FAFC" />
-                            <rect x="70" y="15" width="60" height="15" rx="5" fill="#f472b6" />
-                            <rect x="80" y="10" width="40" height="5" rx="2" fill="#db2777" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </section>
+            <!-- Kolom Input (Sekarang <textarea> "Bodoh") -->
+            <div>
+                <label for="textInput" class="block mb-2 text-lg font-semibold text-slate-300">Editor Teks (Input)</label>
+                
+                <!-- PERUBAHAN: class font-mono dihapus, agar menggunakan font default (Inter) -->
+                <textarea id="textInput" 
+                     class="w-full h-[350px] bg-slate-900 border border-slate-700 rounded-lg p-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-300 overflow-auto" 
+                     placeholder="[Komitmen] Pernyataan komitmen, meliputi:
 
-        <!-- Tentang Kami Section -->
-        <section id="tentang" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div class="scroll-animate">
-                        <span class="text-cyan-500 font-semibold">Kenalan Yuk!</span>
-                        <h2 class="text-3xl md:text-4xl font-bold mt-2 text-slate-900">Kenapa Abiem Trans Jadi Teman Jalan Terbaikmu?</h2>
-                        <p class="mt-4 text-slate-600">Kami bukan sekadar agen travel. Anggap kami teman petualanganmu! Di Abiem Trans, setiap perjalanan punya cerita. Misi kami adalah membuat ceritamu seru, nyaman, dan tak terlupakan.</p>
-                        <div class="mt-8 space-y-6">
-                            <div class="flex items-start">
-                                <div class="bg-emerald-100 text-emerald-500 p-3 rounded-full mr-4 flex-shrink-0">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-lg text-slate-800">Perjalanan Penuh Canda Tawa</h3>
-                                    <p class="text-slate-600">Driver kami bukan cuma jago nyetir, tapi juga asyik diajak ngobrol. Siap-siap perjalanan jadi lebih hidup!</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-amber-100 text-amber-500 p-3 rounded-full mr-4 flex-shrink-0">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-lg text-slate-800">Anti Ngaret, Anti Ribet</h3>
-                                    <p class="text-slate-600">Kami hargai waktumu. Jadwal penjemputan yang pas dan proses booking yang super gampang.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="scroll-animate relative mt-12 md:mt-0">
-                        <img src="https://placehold.co/600x450/0891B2/FFFFFF?text=Abiem+Trans&font=playpen-sans" alt="Tim Abiem Trans yang ceria" class="rounded-3xl shadow-2xl shadow-cyan-500/20 w-full">
-                        <div class="absolute -bottom-8 -right-8 glassmorphism p-6 rounded-2xl w-2/3 border border-white/20">
-                            <p class="font-bold text-slate-800">"Perjalanan paling seru selama ini! Drivernya ramah banget, mobilnya nyaman. Recommended!"</p>
-                            <p class="text-sm text-slate-600 mt-2">- Pelanggan Bahagia</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+1. membayar kompensasi data informasi;
+2. tidak memindahtangankan IUP kepada pihak lain;
 
-        <!-- Layanan Section -->
-        <section id="layanan" class="py-24 hero-pattern">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <span class="text-cyan-500 font-semibold">Semua Untuk Anda</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-2 text-slate-900">Layanan Lengkap untuk Semua Kebutuhan</h2>
-                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">Dari perjalanan rutin hingga liburan spesial, kami punya solusi yang pas buat kamu.</p>
-                </div>
+Coba tempel link seperti www.google.com di sini.
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-cyan-400">
-                        <div class="text-5xl mb-4">🚐</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Travel Reguler (Door to Door)</h3>
-                        <p class="text-slate-600">Layanan antar jemput harian ke berbagai kota tujuan. Praktis dijemput & diantar langsung ke depan pintu.</p>
-                    </div>
-                     <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-pink-400">
-                        <div class="text-5xl mb-4">🔑</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Carter / Sewa Mobil</h3>
-                        <p class="text-slate-600">Sewa satu mobil penuh untuk kebutuhan pribadi, keluarga, atau bisnis (Drop, PP, atau harian).</p>
-                    </div>
-                    <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-amber-400">
-                        <div class="text-5xl mb-4">🏞️</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Tour & Pariwisata</h3>
-                        <p class="text-slate-600">Rencanakan liburan serumu bersama rombongan dengan armada khusus pariwisata.</p>
-                    </div>
-                    <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-emerald-400">
-                        <div class="text-5xl mb-4">🕌</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Pelayanan Ziarah</h3>
-                        <p class="text-slate-600">Mengantar rombongan ke lokasi-lokasi spiritual dan makam wali dengan aman dan khidmat.</p>
-                    </div>
-                     <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-indigo-400">
-                        <div class="text-5xl mb-4">😎</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Driver Profesional</h3>
-                        <p class="text-slate-600">Driver kami ramah, berpengalaman, dan siap menjadi teman ngobrol yang asyik selama perjalanan.</p>
-                    </div>
-                     <div class="scroll-animate glassmorphism p-8 rounded-2xl shadow-lg transform hover:-translate-y-2 transition duration-300 border-t-4 border-rose-400">
-                        <div class="text-5xl mb-4">💰</div>
-                        <h3 class="text-xl font-bold mb-2 text-slate-800">Harga Terjangkau</h3>
-                        <p class="text-slate-600">Kami menawarkan kualitas pelayanan premium dengan harga yang tetap ramah di kantong Anda.</p>
-                    </div>
+Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
+"></textarea>
+                <!-- BARU: Penampil hitungan kata/karakter -->
+                <div id="stats" class="text-sm text-slate-400 mt-2 text-right">
+                    Karakter: 0 | Kata: 0
                 </div>
-            </div>
-        </section>
+            </div> <!-- Ini penutup div kolom kiri -->
 
-        <!-- Armada Section -->
-        <section id="armada" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <span class="text-cyan-500 font-semibold">Pilih Kendaraanmu</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-2 text-slate-900">Armada Keren Siap Meluncur</h2>
-                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">Setiap mobil kami adalah jaminan kenyamanan. Bersih, wangi, dan pastinya super nyaman untuk setiap petualanganmu.</p>
-                </div>
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="scroll-animate group bg-slate-50 rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col border border-slate-100">
-                        <div class="p-6"><img src="data/mobil/New_Avanza.png" alt="Toyota Avanza" class="w-full h-40 object-contain rounded-xl transform group-hover:scale-105 transition-transform duration-300"></div>
-                        <div class="p-6 pt-0 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Avanza / Xenia</h3>
-                            <p class="text-slate-600 text-sm flex-grow">Ideal untuk perjalanan keluarga atau grup kecil yang dinamis.</p>
-                            <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
-                                <span class="text-lg font-bold text-slate-900">Rp600rb<span class="text-sm font-normal text-slate-500">/hari</span></span>
-                                <div class="inline-flex items-center bg-cyan-100 text-cyan-800 text-sm font-semibold px-3 py-1 rounded-full">5-6 Orang</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scroll-animate group bg-slate-50 rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col border border-slate-100">
-                        <div class="p-6"><img src="data/mobil/innova.png" alt="Innova Reborn" class="w-full h-40 object-contain rounded-xl transform group-hover:scale-105 transition-transform duration-300"></div>
-                        <div class="p-6 pt-0 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Innova Reborn</h3>
-                            <p class="text-slate-600 text-sm flex-grow">Nikmati kenyamanan ekstra untuk perjalanan jauh yang lebih berkesan.</p>
-                            <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
-                                <span class="text-lg font-bold text-slate-900">Rp850rb<span class="text-sm font-normal text-slate-500">/hari</span></span>
-                                <div class="inline-flex items-center bg-cyan-100 text-cyan-800 text-sm font-semibold px-3 py-1 rounded-full">6-7 Orang</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scroll-animate group bg-slate-50 rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col border border-slate-100">
-                        <div class="p-6"><img src="data/mobil/Toyota-Hiace.png" alt="Toyota Hiace" class="w-full h-40 object-contain rounded-xl transform group-hover:scale-105 transition-transform duration-300"></div>
-                        <div class="p-6 pt-0 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Toyota Hiace</h3>
-                            <p class="text-slate-600 text-sm flex-grow">Pilihan tepat untuk rombongan, gathering, atau liburan bareng tim.</p>
-                            <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
-                                <span class="text-lg font-bold text-slate-900">Rp1,2jt<span class="text-sm font-normal text-slate-500">/hari</span></span>
-                                <div class="inline-flex items-center bg-cyan-100 text-cyan-800 text-sm font-semibold px-3 py-1 rounded-full">10-12 Orang</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="scroll-animate group bg-slate-50 rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-all duration-300 flex flex-col border border-slate-100">
-                        <div class="p-6"><img src="data/mobil/Elf-Long-200px.png" alt="Elf Long" class="w-full h-40 object-contain rounded-xl transform group-hover:scale-105 transition-transform duration-300"></div>
-                        <div class="p-6 pt-0 flex flex-col flex-grow">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Elf Long</h3>
-                            <p class="text-slate-600 text-sm flex-grow">Solusi terbaik untuk membawa seluruh pasukan dalam satu perjalanan.</p>
-                            <div class="mt-4 flex flex-wrap justify-between items-center gap-2">
-                                <span class="text-lg font-bold text-slate-900">Rp1,5jt<span class="text-sm font-normal text-slate-500">/hari</span></span>
-                                <div class="inline-flex items-center bg-cyan-100 text-cyan-800 text-sm font-semibold px-3 py-1 rounded-full">12-15 Orang</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Rute Section -->
-        <section id="rute" class="py-24 hero-pattern">
-             <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <span class="text-cyan-500 font-semibold">Jelajahi Rute Kami</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mt-2 text-slate-900">Destinasi Favorit dari Cirebon</h2>
-                    <p class="mt-4 text-slate-600 max-w-2xl mx-auto">Kami siap mengantar Anda ke berbagai tujuan populer dengan keberangkatan dari Cirebon, Jabodetabek, hingga kota-kota besar di Jawa.</p>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <!-- Route Cards -->
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/67E8F9/1E293B?text=Soetta&font=playpen-sans" alt="Bandara Soekarno-Hatta" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">✈️ Bandara Soetta</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0891B2/FFFFFF?text=Jakarta&font=playpen-sans" alt="Jakarta" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏙️ Jakarta</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0E7490/FFFFFF?text=Tangerang&font=playpen-sans" alt="Tangerang" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏢 Tangerang</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/155E75/FFFFFF?text=Depok&font=playpen-sans" alt="Depok" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏘️ Depok</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0E7490/FFFFFF?text=Bogor&font=playpen-sans" alt="Bogor" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🌳 Bogor</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/155E75/FFFFFF?text=Bekasi&font=playpen-sans" alt="Bekasi" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏟️ Bekasi</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0891B2/FFFFFF?text=Karawang&font=playpen-sans" alt="Karawang" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏭 Karawang</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0E7490/FFFFFF?text=Cikarang&font=playpen-sans" alt="Cikarang" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏭 Cikarang</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/155E75/FFFFFF?text=Cakung&font=playpen-sans" alt="Cakung" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏗️ Cakung</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0891B2/FFFFFF?text=Pulogadung&font=playpen-sans" alt="Pulogadung" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🚌 Pulogadung</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0E7490/FFFFFF?text=Tanjung+Priok&font=playpen-sans" alt="Tanjung Priok" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🚢 Tanjung Priok</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/155E75/FFFFFF?text=Muara+Angke&font=playpen-sans" alt="Muara Angke" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🐟 Muara Angke</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0891B2/FFFFFF?text=Serang&font=playpen-sans" alt="Serang" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">🏯 Serang</h3>
-                        </div>
-                    </a>
-                    <a href="#kontak" class="scroll-animate group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-cyan-500/20 hover:shadow-xl transition-all duration-300 block aspect-[4/3]">
-                        <img src="https://placehold.co/400x300/0E7490/FFFFFF?text=Bandung&font=playpen-sans" alt="Bandung" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-4">
-                            <h3 class="text-lg font-bold text-white font-brand">⛰️ Bandung</h3>
-                        </div>
-                    </a>
-                     <a href="#kontak" class="scroll-animate group bg-amber-300 rounded-2xl shadow-lg hover:shadow-amber-500/20 hover:shadow-xl transition-all duration-300 flex flex-col items-center justify-center text-center text-amber-800 p-4 aspect-[4/3]">
-                        <div class="text-4xl mb-2 transition-transform duration-300 group-hover:scale-110">🗺️</div>
-                        <h3 class="text-xl font-bold font-brand">Tujuan Lain?</h3>
-                        <p class="mt-1 text-sm font-medium">Tanyakan Saja!</p>
-                    </a>
-                </div>
-                 <p class="text-center mt-8 text-slate-500">Kami juga melayani rute ke kota besar lain seperti <strong>Yogyakarta</strong> & <strong>Semarang</strong>. Hubungi kami untuk info lebih lanjut!</p>
-            </div>
-        </section>
-        
-        <!-- Kontak Section -->
-        <section id="kontak" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="bg-gradient-to-br from-cyan-500 to-cyan-700 rounded-3xl shadow-2xl shadow-cyan-500/30 p-8 md:p-12 lg:p-16">
-                     <div class="grid md:grid-cols-2 gap-12 items-center">
-                        <div class="text-center md:text-left">
-                            <h2 class="text-3xl md:text-4xl font-bold text-white">
-                                Tunggu apa lagi? <span class="font-brand">Yuk, berangkat!</span>
-                            </h2>
-                            <p class="mt-4 text-cyan-100">
-                                Punya pertanyaan atau sudah siap memesan tiket petualanganmu? Tim kami siap sedia membantu. Cukup klik tombol di bawah ini!
-                            </p>
-                            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                                <a href="https://wa.me/6283866624406" target="_blank" class="w-full sm:w-auto bg-white text-cyan-600 font-bold px-6 py-3 rounded-full text-lg shadow-lg hover:bg-cyan-50 transform hover:scale-105 transition duration-300 flex items-center justify-center">
-                                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/></svg>
-                                    Chat di WhatsApp
-                                </a>
-                            </div>
-                        </div>
-                        <div class="hidden md:flex items-center justify-center">
-                           <svg class="w-full h-auto max-w-xs text-white" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M47.3,-67.3C61.8,-57.4,74.5,-44.2,79.5,-29.2C84.5,-14.2,81.8,2.7,75.3,17.2C68.9,31.7,58.7,43.9,46.5,55.2C34.3,66.5,20.1,77,4.3,78.5C-11.4,80,-22.8,72.5,-35.8,64.8C-48.7,57.1,-63.2,49.2,-71.4,37.3C-79.6,25.4,-81.5,9.5,-77.3,-4.2C-73.1,-17.9,-62.8,-29.4,-51.9,-39.3C-41,-49.2,-29.5,-57.5,-16.8,-64.7C-4.1,-71.9,9.8,-78.1,24.1,-79.1C38.4,-80.1,52.8,-77.1,47.3,-67.3Z" transform="translate(100 100)"/></svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-    </main>
-    
-    <!-- AI Assistant FAB -->
-    <button onclick="showAssistantModal()" class="fixed bottom-6 right-6 bg-cyan-600 text-white p-4 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition-transform transform hover:scale-110 z-50">
-        <span class="absolute -top-1 -right-1 flex h-5 w-5">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-5 w-5 bg-pink-400 items-center justify-center text-cyan-800 text-xs font-bold">AI</span>
-        </span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-    </button>
+            <!-- Kolom Output HTML ("Pintar") -->
+            <div>
+                <label class="block mb-2 text-lg font-semibold text-slate-300">Hasil & Preview</label>
 
-    <!-- Footer -->
-    <footer class="bg-slate-800 text-white">
-        <div class="container mx-auto px-6 py-12">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <a href="#" class="flex items-center space-x-2 mb-4">
-                        <svg class="h-10 w-10" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><circle fill="#FFF" cx="32" cy="32" r="32"/><path d="M50 42H14c-1.1 0-2-.9-2-2v-8c0-4.42 3.58-8 8-8h20c4.42 0 8 3.58 8 8v8c0 1.1-.9 2-2 2z" fill="#0891B2"/><path d="M44 24h-24c-2.21 0-4-1.79-4-4v-2c0-2.21 1.79-4 4-4h24c2.21 0 4 1.79 4 4v2c0 2.21-1.79 4-4 4z" fill="#A5F3FC"/><rect fill="#FFF" x="18" y="16" width="28" height="8" rx="2"/><circle fill="#1F2937" cx="20" cy="42" r="6"/><circle fill="#FFF" cx="20" cy="42" r="2"/><circle fill="#1F2937" cx="44" cy="42" r="6"/><circle fill="#FFF" cx="44" cy="42" r="2"/></g></svg>
-                        <span class="text-xl font-bold text-white font-brand">Abiem Trans</span>
-                    </a>
-                    <p class="text-slate-400">Teman perjalanan terbaikmu untuk petualangan yang seru, aman, dan tak terlupakan.</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Navigasi Cepat</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#tentang" class="text-slate-400 hover:text-white transition">Tentang Kami</a></li>
-                        <li><a href="#layanan" class="text-slate-400 hover:text-white transition">Layanan</a></li>
-                        <li><a href="#armada" class="text-slate-400 hover:text-white transition">Armada</a></li>
-                        <li><a href="#rute" class="text-slate-400 hover:text-white transition">Rute Populer</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Hubungi Kami</h3>
-                    <ul class="space-y-2 text-slate-400">
-                        <li><span class="font-semibold text-white">Email:</span> abiemnie63@gmail.com</li>
-                        <li><span class="font-semibold text-white">WA:</span> 083866624406</li>
-                         <li><span class="font-semibold text-white">Alamat:</span> Dusun Pangadangan, RT 12/05, Desa Rancasari, Kec. Pamanukan, Kab. Subang</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="mt-12 border-t border-slate-700 pt-8 text-center text-slate-500">
-                <p>&copy; 2024 Abiem Trans. Dibuat dengan ☕ dan sentuhan modern.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Gemini Modal (Sama seperti sebelumnya, hanya styling warna yang disesuaikan) -->
-    <div id="gemini-modal" class="fixed inset-0 bg-black bg-opacity-60 z-[100] hidden items-center justify-center p-4 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all" id="gemini-modal-content">
-            <div class="p-6 border-b shrink-0">
-                <div class="flex justify-between items-center">
-                    <h3 id="modal-title" class="text-xl md:text-2xl font-bold text-slate-800 flex items-center"></h3>
-                    <button onclick="hideModal()" class="text-slate-400 hover:text-slate-800 transition-colors rounded-full p-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                <!-- Tombol Tab -->
+                <div class="flex mb-2">
+                    <button id="tabKodeBtn" class="py-2 px-5 rounded-t-lg font-semibold bg-slate-700 text-cyan-400 focus:outline-none z-10 border-b-2 border-cyan-400">
+                        Hasil HTML (Kode)
+                    </button>
+                    <button id="tabPreviewBtn" class="py-2 px-5 rounded-t-lg font-semibold bg-slate-800 text-slate-400 hover:bg-slate-700 focus:outline-none border-b-2 border-slate-700">
+                        Preview
                     </button>
                 </div>
-            </div>
-            <div class="p-6 overflow-y-auto">
-                <div id="modal-loader" class="text-center py-8 hidden">
-                    <div class="flex justify-center items-center space-x-2">
-                        <div class="w-4 h-4 rounded-full bg-cyan-500 animate-pulse"></div>
-                        <div class="w-4 h-4 rounded-full bg-cyan-500 animate-pulse" style="animation-delay: 0.2s;"></div>
-                        <div class="w-4 h-4 rounded-full bg-cyan-500 animate-pulse" style="animation-delay: 0.4s;"></div>
+
+                <!-- Konten Tab -->
+                <div class="relative top-[-2px]">
+                    <!-- Tab Content: Kode -->
+                    <div id="tabKode">
+                        <!-- PERUBAHAN: Latar belakang & border disamakan dengan input. font-mono ditambahkan di sini. -->
+                        <textarea id="htmlOutput" 
+                                  rows="15" 
+                                  readonly 
+                                  class="w-full h-[350px] bg-slate-900 border border-slate-700 rounded-b-lg rounded-tr-lg p-4 text-slate-100 font-mono text-sm focus:outline-none resize-none" 
+                                  placeholder="<p>
+    Hasil HTML akan muncul di sini...
+</p>"></textarea>
                     </div>
-                    <p class="mt-4 text-slate-600">Sedang bertanya pada AI... 🤖</p>
-                </div>
-                <div id="modal-result" class="text-slate-700 prose max-w-none"></div>
-                <div id="assistant-input-area" class="hidden">
-                    <div class="mt-4">
-                        <textarea id="assistant-question" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-cyan-500 focus:border-cyan-500" rows="3" placeholder="Contoh: Apakah bisa sewa mobil untuk ke luar kota?"></textarea>
-                        <button onclick="submitAssistantQuestion()" id="assistant-submit-button" class="mt-4 w-full bg-cyan-500 text-white font-bold px-6 py-3 rounded-lg hover:bg-cyan-600 transition">Tanyakan pada AI</button>
+                    
+                    <!-- Tab Content: Preview -->
+                    <div id="tabPreview" class="hidden w-full h-[350px] bg-white text-slate-900 border border-slate-700 rounded-b-lg rounded-tr-lg p-4 overflow-auto prose">
+                        <!-- Preview akan dirender di sini -->
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Tombol Salin & Bersihkan -->
+        <!-- PERUBAHAN: Dibuat flex untuk menampung 2 tombol -->
+        <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+            <button id="copyBtn" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-lg">
+                Salin Hasil HTML
+            </button>
+            <!-- TOMBOL BARU: Bersihkan Editor -->
+            <button id="clearBtn" class="w-full sm:w-auto bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-lg">
+                Bersihkan Editor
+            </button>
         </div>
     </div>
 
+    <!-- Pesan Konfirmasi Salin (tersembunyi) -->
+    <div id="copyMessage" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg hidden transition-all duration-300 opacity-0">
+        Teks berhasil disalin!
+    </div>
+
     <script>
-        // --- SCRIPT UTAMA ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Mobile menu toggle
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            const textInput = document.getElementById('textInput'); 
+            const htmlOutput = document.getElementById('htmlOutput');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn'); 
+            const copyMessage = document.getElementById('copyMessage');
+            const stats = document.getElementById('stats'); // BARU: Elemen stats
 
-            // Animation on scroll
-            const scrollElements = document.querySelectorAll('.scroll-animate');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
+            const tabKodeBtn = document.getElementById('tabKodeBtn');
+            const tabPreviewBtn = document.getElementById('tabPreviewBtn');
+            const tabKode = document.getElementById('tabKode');
+            const tabPreview = document.getElementById('tabPreview');
+
+            // --- FUNGSI HELPER BARU: Deteksi Link ---
+            function linkify(text) {
+                // Regex untuk mendeteksi URL http/https dan www
+                const urlRegex = /(https?:\/\/[^\s<]+|[wW]{3}\.[^\s<]+)/g;
+                return text.replace(urlRegex, (url) => {
+                    let href = url;
+                    // Tambahkan http:// jika link dimulai dengan www.
+                    if (url.toLowerCase().startsWith('www.')) {
+                        href = 'http://' + url;
                     }
+                    // Hasilkan tag <a> yang bersih
+                    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
                 });
-            }, { threshold: 0.1 });
-            scrollElements.forEach(el => observer.observe(el));
+            }
 
-             // --- SCRIPT ANTI-COPY-PASTE ---
-            document.addEventListener('keydown', function(event) {
-                const target = event.target;
-                const isInput = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA';
-                if (event.key === 'F12') { event.preventDefault(); }
-                if (event.ctrlKey) {
-                    const key = event.key.toLowerCase();
-                    if (['c', 'u', 's'].includes(key)) { if (key === 'c' && isInput) { return; } event.preventDefault(); }
-                    if (key === 'a') { if (isInput) { return; } event.preventDefault(); }
-                    if (event.shiftKey && ['i', 'j', 'c'].includes(key)) { event.preventDefault(); }
+            // --- FUNGSI HELPER BARU: Deteksi Format Markdown ---
+            function formatText(text) {
+                // Urutan penting agar ** diproses sebelum *
+                return text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/__(.*?)__/g, '<strong>$1</strong>') // Bold (underscore)
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')     // Italic
+                    .replace(/_(.*?)_/g, '<em>$1</em>')     // Italic (underscore)
+                    .replace(/~~(.*?)~~/g, '<s>$1</s>');    // Strikethrough
+            }
+
+
+            // --- FUNGSI "PINTAR" BARU ---
+            function convertPlainTextToHtml(plainText) {
+                if (!plainText.trim()) {
+                    return ""; 
                 }
+
+                return plainText.split(/\n{2,}/)
+                    .map(paragraph => {
+                        let lines = paragraph.split('\n');
+                        let htmlItems = []; 
+                        let currentListType = null; // null, 'ol-number', 'ol-letter', 'ol-roman', 'ul'
+                        let nonListBuffer = []; 
+
+                        function flushNonListBuffer() {
+                            if (nonListBuffer.length > 0) {
+                                // PERUBAHAN: Terapkan formatText dan linkify
+                                htmlItems.push(`<p>${nonListBuffer.map(line => linkify(formatText(line))).join('<br>')}</p>`);
+                                nonListBuffer = [];
+                            }
+                        }
+
+                        function closeCurrentList() {
+                            // PERUBAHAN: Disesuaikan untuk tipe list baru
+                            if (currentListType === 'ol-number' || currentListType === 'ol-letter' || currentListType === 'ol-roman') {
+                                htmlItems.push('</ol>');
+                            } else if (currentListType === 'ul') {
+                                htmlItems.push('</ul>');
+                            }
+                            currentListType = null;
+                        }
+
+                        for (const line of lines) {
+                            const olMatch = line.match(/^(\s*)(\d+)\.\s+(.*)/); 
+                            const letterMatch = line.match(/^(\s*)([a-zA-Z])[\.\)]\s+(.*)/); 
+                            const romanMatch = line.match(/^(\s*)([ivxlcdmIVXLCDM]+)[\.\)]\s+(.*)/); 
+                            const ulMatch = line.match(/^(\s*)[\-\*•]\s+(.*)/); 
+
+                            // PERUBAHAN: Terapkan formatText() dan linkify() ke hasil match
+                            if (olMatch) {
+                                if (currentListType !== 'ol-number') {
+                                    flushNonListBuffer();
+                                    closeCurrentList();
+                                    htmlItems.push('<ol type="1">'); 
+                                    currentListType = 'ol-number';
+                                }
+                                htmlItems.push(`<li>${linkify(formatText(olMatch[3].trim()))}</li>`); 
+                            } else if (letterMatch) {
+                                if (currentListType !== 'ol-letter') {
+                                    flushNonListBuffer();
+                                    closeCurrentList();
+                                    const listType = letterMatch[2].match(/[a-z]/) ? 'a' : 'A';
+                                    htmlItems.push(`<ol type="${listType}">`); 
+                                    currentListType = 'ol-letter';
+                                }
+                                htmlItems.push(`<li>${linkify(formatText(letterMatch[3].trim()))}</li>`);
+                            } else if (romanMatch) {
+                                if (currentListType !== 'ol-roman') {
+                                    flushNonListBuffer();
+                                    closeCurrentList();
+                                    const listType = romanMatch[2].match(/[ivxlcdm]/) ? 'i' : 'I';
+                                    htmlItems.push(`<ol type="${listType}">`); 
+                                    currentListType = 'ol-roman';
+                                }
+                                htmlItems.push(`<li>${linkify(formatText(romanMatch[3].trim()))}</li>`);
+                            } else if (ulMatch) {
+                                if (currentListType !== 'ul') {
+                                    flushNonListBuffer();
+                                    closeCurrentList();
+                                    htmlItems.push('<ul>'); 
+                                    currentListType = 'ul';
+                                }
+                                htmlItems.push(`<li>${linkify(formatText(ulMatch[2].trim()))}</li>`); 
+                            } else {
+                                closeCurrentList(); 
+                                if (line.trim() !== '') {
+                                    nonListBuffer.push(line); // Jangan linkify di sini, tapi di flushNonListBuffer
+                                }
+                            }
+                        }
+
+                        closeCurrentList();
+                        flushNonListBuffer();
+                        
+                        return htmlItems.join('\n'); 
+                    })
+                    .join('\n'); // PERUBAHAN: Menggunakan \n tunggal antar paragraf untuk hasil lebih rapat
+            }
+
+            // 1. Jalankan fungsi konversi setiap kali pengguna mengetik
+            textInput.addEventListener('input', () => {
+                const plainText = textInput.value;
+                const generatedHtml = convertPlainTextToHtml(plainText);
+
+                htmlOutput.value = generatedHtml;
+                tabPreview.innerHTML = generatedHtml;
+
+                // BARU: Update hitungan kata/karakter
+                const charCount = plainText.length;
+                // Regex \s+ mencocokkan spasi, tab, atau baris baru
+                // filter(Boolean) menghapus string kosong jika ada spasi ganda
+                const wordCount = plainText.trim() === '' ? 0 : plainText.trim().split(/\s+/).filter(Boolean).length;
+                stats.textContent = `Karakter: ${charCount} | Kata: ${wordCount}`;
             });
+
+            // 2. Fungsi untuk tombol "Salin"
+            copyBtn.addEventListener('click', () => {
+                if (!htmlOutput.value) return; 
+
+                htmlOutput.select();
+                htmlOutput.setSelectionRange(0, 99999); 
+                
+                try {
+                    document.execCommand('copy');
+                    
+                    copyMessage.classList.remove('hidden');
+                    setTimeout(() => copyMessage.classList.add('opacity-100'), 10); 
+                    
+                    setTimeout(() => {
+                        copyMessage.classList.remove('opacity-100');
+                        setTimeout(() => copyMessage.classList.add('hidden'), 300); 
+                    }, 2000);
+
+                } catch (err) {
+                    console.error('Gagal menyalin teks: ', err);
+                }
+                
+                window.getSelection().removeAllRanges();
+            });
+
+            // 3. FUNGSI BARU: Tombol "Bersihkan"
+            clearBtn.addEventListener('click', () => {
+                textInput.value = "";
+                // Memicu event 'input' secara manual untuk memperbarui panel kanan
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                // BARU: Reset stats secara manual (opsional, karena event di atas sudah menanganinya)
+                // stats.textContent = `Karakter: 0 | Kata: 0`;
+            });
+
+            // 5. Fungsi untuk mengelola Tab
+            tabKodeBtn.addEventListener('click', () => {
+                tabKode.classList.remove('hidden');
+                tabPreview.classList.add('hidden');
+                
+                // PERUBAHAN: Menggunakan 'slate'
+                tabKodeBtn.classList.add('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+                tabKodeBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                
+                tabPreviewBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                tabPreviewBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+            });
+
+            tabPreviewBtn.addEventListener('click', () => {
+                tabKode.classList.add('hidden');
+                tabPreview.classList.remove('hidden');
+
+                // PERUBAHAN: Menggunakan 'slate'
+                tabPreviewBtn.classList.add('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+                tabPreviewBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                
+                tabKodeBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
+                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+            });
+
         });
-
-        // --- SCRIPT MODAL & AI ---
-        const modal = document.getElementById('gemini-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const modalLoader = document.getElementById('modal-loader');
-        const modalResult = document.getElementById('modal-result');
-        const assistantInputArea = document.getElementById('assistant-input-area');
-
-        function showModal() {
-            document.body.style.overflow = 'hidden';
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function hideModal() {
-            document.body.style.overflow = 'auto';
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        // Dummy function to simulate API call since we can't use the netlify function here
-        async function callGemini(prompt) {
-             return new Promise(resolve => {
-                setTimeout(() => {
-                    // Simple logic for demonstration
-                    if (prompt.includes("aktivitas wisata")) {
-                        resolve(`
-                            Tentu, ini dia beberapa ide seru!
-                            <ul>
-                                <li><strong>Wisata Kuliner Tersembunyi:</strong> Cicipi makanan lokal otentik di tempat yang jarang diketahui turis.</li>
-                                <li><strong>Workshop Kerajinan Tangan:</strong> Belajar membuat batik atau kerajinan lokal lainnya langsung dari ahlinya.</li>
-                                <li><strong>Menyusuri Sungai:</strong> Nikmati pemandangan alam yang indah dari perahu sambil bersantai.</li>
-                                <li><strong>Berburu Foto di Spot Instagramable:</strong> Kami tahu tempat-tempat rahasia dengan pemandangan menakjubkan.</li>
-                                <li><strong>Petualangan Alam:</strong> Jelajahi air terjun tersembunyi atau trekking ringan di perbukitan sekitar.</li>
-                            </ul>
-                        `);
-                    } else {
-                         resolve(`
-                            <p>Tentu, saya bisa bantu! Berdasarkan informasi kami:</p>
-                            <ul>
-                                <li>Untuk sewa mobil ke luar kota, kami menyediakan layanan <strong>Carter Drop</strong> (satu arah) atau <strong>Carter PP</strong> (pulang-pergi).</li>
-                                <li>Anda bisa memilih armada sesuai kebutuhan, mulai dari Avanza hingga Elf Long.</li>
-                                <li>Untuk pemesanan dan info harga detail, silakan langsung hubungi kami via WhatsApp di <strong>083866624406</strong> ya!</li>
-                            </ul>
-                         `);
-                    }
-                }, 1500); // Simulate network delay
-            });
-        }
-        
-        async function getTripIdeas(destination) {
-            showModal();
-            modalTitle.innerHTML = `<span class="text-pink-500 mr-2">✨</span> Ide Aktivitas di <span class="ml-2 text-cyan-600">${destination}</span>`;
-            assistantInputArea.classList.add('hidden');
-            modalResult.innerHTML = '';
-            modalLoader.classList.remove('hidden');
-            const prompt = `Berikan ide aktivitas wisata di ${destination}`;
-            const resultHtml = await callGemini(prompt);
-            modalResult.innerHTML = resultHtml;
-            modalLoader.classList.add('hidden');
-        }
-
-        function showAssistantModal() {
-            showModal();
-            modalTitle.innerHTML = `<span class="text-cyan-500 mr-2">🤖</span> Asisten AI Abiem Trans`;
-            modalLoader.classList.add('hidden');
-            modalResult.innerHTML = '<p>Halo! Ada yang bisa saya bantu? Tanyakan apa saja tentang layanan Abiem Trans.</p>';
-            assistantInputArea.classList.remove('hidden');
-            document.getElementById('assistant-question').value = '';
-            const submitButton = document.getElementById('assistant-submit-button');
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Tanyakan pada AI';
-        }
-
-        async function submitAssistantQuestion() {
-            const questionInput = document.getElementById('assistant-question');
-            const question = questionInput.value;
-            if (!question.trim()) return;
-
-            const submitButton = document.getElementById('assistant-submit-button');
-            submitButton.disabled = true;
-            submitButton.innerHTML = 'AI sedang berpikir...';
-            
-            modalResult.innerHTML += `<hr class="my-4"><div class="p-4 bg-slate-100 rounded-lg"><p class="font-semibold">Anda:</p><p>${question}</p></div>`;
-            modalResult.parentElement.scrollTop = modalResult.parentElement.scrollHeight;
-            modalLoader.classList.remove('hidden');
-
-            const resultHtml = await callGemini(question);
-            modalLoader.classList.add('hidden');
-            modalResult.innerHTML += `<div class="mt-4"><p class="font-semibold">Asisten AI:</p>${resultHtml}</div>`;
-            
-            questionInput.value = '';
-            submitButton.disabled = false;
-            submitButton.innerHTML = 'Tanyakan Lagi';
-            modalResult.parentElement.scrollTop = modalResult.parentElement.scrollHeight;
-        }
-
-        // Modal event listeners
-        modal.addEventListener('click', (e) => { if (e.target === modal) hideModal(); });
-        document.addEventListener('keydown', (e) => { if (e.key === "Escape") hideModal(); });
-
     </script>
-
 </body>
 </html>
+
 
