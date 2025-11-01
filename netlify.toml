@@ -1,0 +1,6 @@
+# File konfigurasi ini memberitahu Netlify di mana menemukan
+# Netlify Functions Anda.
+
+[build]
+  # Direktori tempat Netlify Functions Anda berada
+  functions = "netlify/functions"
