@@ -2,7 +2,7 @@
 // File ini akan berjalan di server Netlify, bukan di browser.
 
 // URL API Gemini yang sebenarnya
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=AIzaSyBoig57y2H_9LjRrTrxdsV97M0EHY21CFM`;
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`;
 
 export const handler = async (event) => {
     // 1. Dapatkan API Key dari Environment Variables (yang Anda atur di Netlify)
@@ -84,4 +84,5 @@ export const handler = async (event) => {
         };
     }
 };
+
 
