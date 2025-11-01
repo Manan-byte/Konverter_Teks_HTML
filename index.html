@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-R">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Konverter Teks Biasa ke HTML</title>
     <!-- Memuat Tailwind CSS untuk styling -->
@@ -37,6 +37,21 @@
         #tabPreview strong { font-weight: bold; }
         #tabPreview em { font-style: italic; }
         #tabPreview s { text-decoration: line-through; }
+
+        /* BARU: Animasi Spinner untuk Modal Loading */
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 6px solid #1e293b; /* slate-800 */
+            border-top-color: #22d3ee; /* cyan-400 */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 <!-- PERUBAHAN: Menggunakan palet warna 'slate' yang lebih modern -->
@@ -66,8 +81,19 @@ Coba tempel link seperti www.google.com di sini.
 
 Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
 "></textarea>
+                <!-- BARU: Tombol Gemini -->
+                <div class="mt-4 flex flex-col sm:flex-row gap-3">
+                    <button id="continueBtn" class="w-full sm:w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                        title="Lanjutkan teks yang ada di editor menggunakan AI">
+                        ✨ Lanjutkan Teks
+                    </button>
+                    <button id="summarizeBtn" class="w-full sm:w-1/2 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
+                        title="Buat ringkasan dari teks di editor menggunakan AI">
+                        ✨ Ringkas Teks
+                    </button>
+                </div>
                 <!-- BARU: Penampil hitungan kata/karakter -->
-                <div id="stats" class="text-sm text-slate-400 mt-2 text-right">
+                <div id="stats" class="text-sm text-slate-400 mt-3 text-right">
                     Karakter: 0 | Kata: 0
                 </div>
             </div> <!-- Ini penutup div kolom kiri -->
@@ -126,6 +152,26 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
         Teks berhasil disalin!
     </div>
 
+    <!-- BARU: Modal Loading Gemini -->
+    <div id="loadingModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="flex flex-col items-center">
+            <div class="spinner"></div>
+            <p class="text-xl font-semibold text-cyan-300 mt-4">✨ Memproses... Mohon tunggu...</p>
+        </div>
+    </div>
+
+    <!-- BARU: Modal Pesan Kustom (Pengganti Alert) -->
+    <div id="alertModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-slate-700 p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+            <h3 class="text-lg font-bold text-cyan-400 mb-4">Informasi</h3>
+            <p id="alertMessage" class="text-slate-200 mb-6">Ini adalah pesan peringatan.</p>
+            <button id="alertOkBtn" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                OK
+            </button>
+        </div>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const textInput = document.getElementById('textInput'); 
@@ -134,6 +180,14 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             const clearBtn = document.getElementById('clearBtn'); 
             const copyMessage = document.getElementById('copyMessage');
             const stats = document.getElementById('stats'); // BARU: Elemen stats
+
+            // BARU: Elemen Gemini & Modal
+            const continueBtn = document.getElementById('continueBtn');
+            const summarizeBtn = document.getElementById('summarizeBtn');
+            const loadingModal = document.getElementById('loadingModal');
+            const alertModal = document.getElementById('alertModal');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertOkBtn = document.getElementById('alertOkBtn');
 
             const tabKodeBtn = document.getElementById('tabKodeBtn');
             const tabPreviewBtn = document.getElementById('tabPreviewBtn');
@@ -255,6 +309,88 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                     .join('\n'); // PERUBAHAN: Menggunakan \n tunggal antar paragraf untuk hasil lebih rapat
             }
 
+            // --- BARU: Fungsi Modal Pesan Kustom ---
+            function showAlert(message) {
+                alertMessage.textContent = message;
+                alertModal.classList.remove('hidden');
+            }
+            // Listener untuk tombol OK pada modal pesan
+            alertOkBtn.addEventListener('click', () => {
+                alertModal.classList.add('hidden');
+            });
+
+            // --- BARU: Fungsi API Gemini ---
+            const API_KEY = ""; // Biarkan kosong, akan diisi oleh environment
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
+
+            /**
+             * Melakukan fetch ke API dengan exponential backoff
+             */
+            async function fetchWithBackoff(apiUrl, payload, retries = 3, delay = 1000) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        // Jika 429 (Too Many Requests) dan masih ada percobaan, coba lagi
+                        if (response.status === 429 && retries > 0) {
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                            return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
+                        }
+                        // Untuk error lain, langsung lemparkan
+                        throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                } catch (error) {
+                    // Coba lagi untuk network error atau error lainnya jika masih ada percobaan
+                    if (retries > 0) {
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                        return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
+                    }
+                    console.error("Gagal melakukan fetch setelah beberapa kali percobaan:", error);
+                    throw error; // Lemparkan error setelah gagal
+                }
+            }
+
+            /**
+             * Memanggil API Gemini dengan prompt yang diberikan
+             */
+            async function callGemini(prompt, systemInstruction) {
+                loadingModal.classList.remove('hidden');
+                continueBtn.disabled = true;
+                summarizeBtn.disabled = true;
+
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: {
+                        parts: [{ text: systemInstruction }]
+                    }
+                };
+
+                try {
+                    const result = await fetchWithBackoff(API_URL, payload);
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    
+                    if (!text) {
+                        throw new Error("Tidak ada konten yang diterima dari API.");
+                    }
+                    return text;
+                } catch (error) {
+                    console.error("Error memanggil Gemini API:", error);
+                    showAlert(`Terjadi kesalahan saat menghubungi AI: ${error.message}`);
+                    return null; // Kembalikan null jika gagal
+                } finally {
+                    loadingModal.classList.add('hidden');
+                    continueBtn.disabled = false;
+                    summarizeBtn.disabled = false;
+                }
+            }
+            
+            // --- Event Listeners ---
+
             // 1. Jalankan fungsi konversi setiap kali pengguna mengetik
             textInput.addEventListener('input', () => {
                 const plainText = textInput.value;
@@ -305,6 +441,46 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 // stats.textContent = `Karakter: 0 | Kata: 0`;
             });
 
+            // --- BARU: Event Listeners Tombol Gemini ---
+            continueBtn.addEventListener('click', async () => {
+                const currentText = textInput.value;
+                if (!currentText.trim()) {
+                    showAlert("Editor masih kosong. Tulis sesuatu untuk dilanjutkan.");
+                    return;
+                }
+
+                const systemPrompt = "Anda adalah asisten penulis AI. Lanjutkan teks yang diberikan oleh pengguna dengan mulus. Fokus hanya pada penambahan konten baru. JANGAN ulangi teks yang ada. Langsung berikan teks lanjutannya saja tanpa pengantar apa pun.";
+                const prompt = `Ini adalah teks yang ada:\n\"\"\"${currentText}\"\"\"\n\nLanjutkan tulisan ini:`;
+                
+                const continuation = await callGemini(prompt, systemPrompt);
+                
+                if (continuation) {
+                    textInput.value = currentText + "\n\n" + continuation.trim();
+                    // Picu event input untuk memperbarui preview HTML dan statistik
+                    textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+
+            summarizeBtn.addEventListener('click', async () => {
+                const currentText = textInput.value;
+                if (!currentText.trim()) {
+                    showAlert("Editor masih kosong. Tulis sesuatu untuk diringkas.");
+                    return;
+                }
+
+                const systemPrompt = "Anda adalah asisten AI yang ahli meringkas. Buat ringkasan yang jelas dan padat dari teks yang diberikan. Langsung berikan hasil ringkasannya saja tanpa pengantar apa pun.";
+                const prompt = `Ringkas teks ini:\n\"\"\"${currentText}\"\"\"`;
+                
+                const summary = await callGemini(prompt, systemPrompt);
+                
+                if (summary) {
+                    textInput.value = summary.trim();
+                    // Picu event input untuk memperbarui preview HTML dan statistik
+                    textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            });
+
+
             // 5. Fungsi untuk mengelola Tab
             tabKodeBtn.addEventListener('click', () => {
                 tabKode.classList.remove('hidden');
@@ -327,12 +503,11 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 tabPreviewBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
                 
                 tabKodeBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400'); // Perbaikan typo 4s00 -> 400
             });
 
         });
     </script>
 </body>
 </html>
-
 
