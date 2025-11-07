@@ -11,18 +11,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Kustomisasi scrollbar - SEKARANG MENGGUNAKAN WARNA SLATE */
-        textarea::-webkit-scrollbar {
+        /* Kustomisasi scrollbar */
+        textarea::-webkit-scrollbar,
+        div[contenteditable="true"]::-webkit-scrollbar {
             width: 8px;
         }
-        textarea::-webkit-scrollbar-track {
+        textarea::-webkit-scrollbar-track,
+        div[contenteditable="true"]::-webkit-scrollbar-track {
             background: #1e293b; /* bg-slate-800 */
         }
-        textarea::-webkit-scrollbar-thumb {
+        textarea::-webkit-scrollbar-thumb,
+        div[contenteditable="true"]::-webkit-scrollbar-thumb {
             background: #475569; /* bg-slate-600 */
             border-radius: 4px;
         }
-        textarea::-webkit-scrollbar-thumb:hover {
+        textarea::-webkit-scrollbar-thumb:hover,
+        div[contenteditable="true"]::-webkit-scrollbar-thumb:hover {
             background: #64748b; /* bg-slate-500 */
         }
         body {
@@ -33,12 +37,11 @@
             color: #0891b2; /* text-cyan-600 */
             text-decoration: underline;
         }
-        /* BARU: Style untuk format markdown di preview */
         #tabPreview strong { font-weight: bold; }
         #tabPreview em { font-style: italic; }
         #tabPreview s { text-decoration: line-through; }
 
-        /* BARU: Animasi Spinner untuk Modal Loading */
+        /* Animasi Spinner */
         .spinner {
             width: 56px;
             height: 56px;
@@ -52,7 +55,7 @@
                 transform: rotate(360deg);
             }
         }
-        /* BARU: Style untuk tombol format */
+        /* Style untuk tombol format */
         .format-btn {
             background-color: #334155; /* bg-slate-700 */
             color: #cbd5e1; /* text-slate-300 */
@@ -67,24 +70,49 @@
             background-color: #475569; /* bg-slate-600 */
             color: #e2e8f0; /* text-slate-200 */
         }
+
+        /* PERUBAHAN BESAR: Style untuk editor contenteditable baru */
+        div[contenteditable="true"] {
+            /* Meniru style textarea sebelumnya */
+            height: 350px;
+            background-color: #0f172a; /* bg-slate-900 */
+            border: 1px solid #334155; /* border-slate-700 */
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 1rem; /* p-4 */
+            color: #e2e8f0; /* text-slate-200 */
+            transition: all 0.3s ease;
+            overflow-y: auto; /* overflow-auto */
+            line-height: 1.5;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        div[contenteditable="true"]:focus {
+            outline: none;
+            border-color: #06b6d4; /* ring-cyan-500 */
+            box-shadow: 0 0 0 2px #06b6d4; /* ring-2 */
+        }
+        /* Placeholder kustom untuk div contenteditable */
+        div[contenteditable="true"]:empty:before {
+            content: "[Komitmen] Pernyataan komitmen, meliputi:\A\A1. membayar kompensasi data informasi;\A2. tidak memindahtangankan IUP kepada pihak lain;\A\ACoba tempel link seperti www.google.com di sini.\A\ACoba juga format tebal, miring, atau coret.";
+            color: #64748b; /* text-slate-500 */
+            white-space: pre-wrap; /* Hormati newline \A */
+            pointer-events: none; /* Izinkan klik "melalui" placeholder */
+            display: block;
+        }
     </style>
 </head>
-<!-- PERUBAHAN: Menggunakan palet warna 'slate' yang lebih modern -->
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center p-4">
 
-    <!-- Kontainer utama aplikasi -->
     <div class="bg-slate-800 p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-6xl"> 
         <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML</h1>
         <p class="text-center text-slate-400 mb-8">Tulis atau tempel teks biasa di editor kiri. Kode HTML akan otomatis dibuat di sebelah kanan.</p>
 
-        <!-- Grid untuk input dan output -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Kolom Input (Sekarang <textarea> "Bodoh") -->
             <div>
                 <label for="textInput" class="block mb-2 text-lg font-semibold text-slate-300">Editor Teks (Input)</label>
                 
-                <!-- BARU: Toolbar Format -->
                 <div class="flex items-center gap-2 mb-2 p-2 bg-slate-700 rounded-lg">
                     <button id="formatBoldBtn" class="format-btn font-bold" title="Buat tebal (Pilih teks & klik)">
                         B
@@ -101,19 +129,13 @@
                     <input type="color" id="colorPicker" value="#FFFFFF" class="h-8 w-10 p-0 border-none rounded cursor-pointer bg-slate-700" title="Pilih warna">
                 </div>
 
-                <!-- PERUBAHAN: class font-mono dihapus, agar menggunakan font default (Inter) -->
-                <textarea id="textInput" 
+                <!-- PERUBAHAN BESAR: <textarea> diganti dengan <div contenteditable="true"> -->
+                <div id="textInput" 
+                     contenteditable="true"
                      class="w-full h-[350px] bg-slate-900 border border-slate-700 rounded-lg p-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-300 overflow-auto" 
-                     placeholder="[Komitmen] Pernyataan komitmen, meliputi:
-
-1. membayar kompensasi data informasi;
-2. tidak memindahtangankan IUP kepada pihak lain;
-
-Coba tempel link seperti www.google.com di sini.
-
-Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
-"></textarea>
-                <!-- BARU: Tombol Gemini -->
+                     spellcheck="false">
+                </div>
+                
                 <div class="mt-4 flex flex-col sm:flex-row gap-3">
                     <button id="continueBtn" class="w-full sm:w-1/2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300 shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
                         title="Lanjutkan teks yang ada di editor menggunakan AI">
@@ -124,17 +146,14 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                         ✨ Ringkas Teks
                     </button>
                 </div>
-                <!-- BARU: Penampil hitungan kata/karakter -->
                 <div id="stats" class="text-sm text-slate-400 mt-3 text-right">
                     Karakter: 0 | Kata: 0
                 </div>
-            </div> <!-- Ini penutup div kolom kiri -->
+            </div>
 
-            <!-- Kolom Output HTML ("Pintar") -->
             <div>
                 <label class="block mb-2 text-lg font-semibold text-slate-300">Hasil & Preview</label>
 
-                <!-- Tombol Tab -->
                 <div class="flex mb-2">
                     <button id="tabKodeBtn" class="py-2 px-5 rounded-t-lg font-semibold bg-slate-700 text-cyan-400 focus:outline-none z-10 border-b-2 border-cyan-400">
                         Hasil HTML (Kode)
@@ -144,11 +163,8 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                     </button>
                 </div>
 
-                <!-- Konten Tab -->
                 <div class="relative top-[-2px]">
-                    <!-- Tab Content: Kode -->
                     <div id="tabKode">
-                        <!-- PERUBAHAN: Latar belakang & border disamakan dengan input. font-mono ditambahkan di sini. -->
                         <textarea id="htmlOutput" 
                                   rows="15" 
                                   readonly 
@@ -158,33 +174,26 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
 </p>"></textarea>
                     </div>
                     
-                    <!-- Tab Content: Preview -->
                     <div id="tabPreview" class="hidden w-full h-[350px] bg-white text-slate-900 border border-slate-700 rounded-b-lg rounded-tr-lg p-4 overflow-auto prose">
-                        <!-- Preview akan dirender di sini -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tombol Salin & Bersihkan -->
-        <!-- PERUBAHAN: Dibuat flex untuk menampung 2 tombol -->
         <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
             <button id="copyBtn" class="w-full sm:w-auto bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-lg">
                 Salin Hasil HTML
             </button>
-            <!-- TOMBOL BARU: Bersihkan Editor -->
             <button id="clearBtn" class="w-full sm:w-auto bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 text-lg shadow-lg">
                 Bersihkan Editor
             </button>
         </div>
     </div>
 
-    <!-- Pesan Konfirmasi Salin (tersembunyi) -->
     <div id="copyMessage" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-500 text-white py-2 px-5 rounded-lg shadow-lg hidden transition-all duration-300 opacity-0">
         Teks berhasil disalin!
     </div>
 
-    <!-- BARU: Modal Loading Gemini -->
     <div id="loadingModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
         <div class="flex flex-col items-center">
             <div class="spinner"></div>
@@ -192,7 +201,6 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
         </div>
     </div>
 
-    <!-- BARU: Modal Pesan Kustom (Pengganti Alert) -->
     <div id="alertModal" class="fixed inset-0 bg-slate-900 bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
         <div class="bg-slate-700 p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
             <h3 class="text-lg font-bold text-cyan-400 mb-4">Informasi</h3>
@@ -206,14 +214,13 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const textInput = document.getElementById('textInput'); 
+            const textInput = document.getElementById('textInput'); // Sekarang ini adalah <div>
             const htmlOutput = document.getElementById('htmlOutput');
             const copyBtn = document.getElementById('copyBtn');
             const clearBtn = document.getElementById('clearBtn'); 
             const copyMessage = document.getElementById('copyMessage');
-            const stats = document.getElementById('stats'); // BARU: Elemen stats
+            const stats = document.getElementById('stats'); 
 
-            // BARU: Elemen Gemini & Modal
             const continueBtn = document.getElementById('continueBtn');
             const summarizeBtn = document.getElementById('summarizeBtn');
             const loadingModal = document.getElementById('loadingModal');
@@ -221,10 +228,9 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             const alertMessage = document.getElementById('alertMessage');
             const alertOkBtn = document.getElementById('alertOkBtn');
 
-            // BARU: Elemen Toolbar Format
-            const formatBoldBtn = document.getElementById('formatBoldBtn'); // BARU
+            const formatBoldBtn = document.getElementById('formatBoldBtn'); 
             const formatItalicBtn = document.getElementById('formatItalicBtn');
-            const formatStrikethroughBtn = document.getElementById('formatStrikethroughBtn'); // BARU
+            const formatStrikethroughBtn = document.getElementById('formatStrikethroughBtn'); 
             const formatColorBtn = document.getElementById('formatColorBtn');
             const colorPicker = document.getElementById('colorPicker');
 
@@ -233,143 +239,105 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             const tabKode = document.getElementById('tabKode');
             const tabPreview = document.getElementById('tabPreview');
 
-            // --- FUNGSI HELPER BARU: Deteksi Link ---
-            function linkify(text) {
-                // Regex untuk mendeteksi URL http/https dan www
-                const urlRegex = /(https?:\/\/[^\s<]+|[wW]{3}\.[^\s<]+)/g;
-                return text.replace(urlRegex, (url) => {
-                    let href = url;
-                    // Tambahkan http:// jika link dimulai dengan www.
-                    if (url.toLowerCase().startsWith('www.')) {
-                        href = 'http://' + url;
-                    }
-                    // Hasilkan tag <a> yang bersih
-                    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
-                });
-            }
-
-            // --- FUNGSI HELPER BARU: Deteksi Format Markdown ---
-            function formatText(text) {
-                // PERUBAHAN: Jalankan format warna DULU agar tidak bentrok
-                let formattedText = text;
-
-                // BARU: Terapkan format warna
-                // Regex aman: hanya mengizinkan nama warna (alphabet) atau kode hex (#)
-                // Ini akan mencari [color=#hex]teks[/color] atau [color=red]teks[/color]
-                const colorRegex = /\[color=([a-zA-Z]+|#[0-9a-fA-F]{3,6})\](.*?)\[\/color\]/g;
-                formattedText = formattedText.replace(colorRegex, (match, color, innerText) => {
-                    // Sanitasi sederhana: Pastikan format warna aman
-                    if (/^([a-zA-Z]+|#[0-9a-fA-F]{3,6})$/.test(color)) {
-                        return `<span style="color: ${color};">${innerText}</span>`;
-                    }
-                    return innerText; // Kembalikan teks asli jika format warna tidak aman
-                });
-
-                // Urutan penting agar ** diproses sebelum *
-                // PERUBAHAN: Regex ini sekarang lebih aman dan mengabaikan tag HTML
-                // Ini mencegahnya merusak tag <span> dari warna
-                formattedText = formattedText
-                    .replace(/\*\*(?![^<]*>)(.*?)(?![^<]*>)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/__(?![^<]*>)(.*?)(?![^<]*>)__/g, '<strong>$1</strong>') // Bold (underscore)
-                    
-                    // PERBAIKAN: Regex Italic ini sekarang lebih pintar.
-                    // Ia mencari *teks* tetapi mengabaikan **teks** (karena [^\s*] berarti "bukan spasi atau bintang")
-                    // Ini mencegahnya merusak sintaks Bold atau sintaks yang salah.
-                    .replace(/\*([^\s*](?:.|\n)*?)\*/g, '<em>$1</em>')     // Italic
-                    
-                    .replace(/_(?![^<]*>)(.*?)(?![^<]*>)_/g, '<em>$1</em>')     // Italic (underscore) - Biarkan yang ini untuk kompatibilitas
-                    .replace(/~~(?![^<]*>)(.*?)(?![^<]*>)~~/g, '<s>$1</s>');    // Strikethrough
-                
-                return formattedText;
-            }
-
-
-            // --- FUNGSI "PINTAR" BARU ---
-            function convertPlainTextToHtml(plainText) {
-                if (!plainText.trim()) {
-                    return ""; 
+            // --- PERUBAHAN: Fungsi untuk membersihkan HTML dari contenteditable ---
+            function cleanAndProcessHtml(rawHtml) {
+                if (!rawHtml.trim()) {
+                    return "";
                 }
+                let cleaned = rawHtml;
 
-                return plainText.split(/\n{2,}/)
-                    .map(paragraph => {
-                        let lines = paragraph.split('\n');
-                        let htmlItems = []; 
-                        let currentListType = null; // null, 'ol-number', 'ol-letter', 'ol-roman', 'ul'
-                        let nonListBuffer = []; 
+                // 1. Ganti tag styling lama (dari execCommand) ke tag modern
+                cleaned = cleaned.replace(/<b\b[^>]*>(.*?)<\/b>/gi, '<strong>$1</strong>');
+                cleaned = cleaned.replace(/<i\b[^>]*>(.*?)<\/i>/gi, '<em>$1</em>');
+                cleaned = cleaned.replace(/<strike\b[^>]*>(.*?)<\/strike>/gi, '<s>$1</s>');
+                
+                // 2. Ganti <font color="..."> ke <span style="color:...">
+                cleaned = cleaned.replace(/<font color="(.*?)"[^>]*>(.*?)<\/font>/gi, (match, color, text) => {
+                    // Pastikan warna aman (hex atau nama)
+                    if (/^([a-zA-Z]+|#[0-9a-fA-F]{3,6})$/.test(color)) {
+                        return `<span style="color: ${color};">${text}</span>`;
+                    }
+                    return text; // Kembalikan teks asli jika warna tidak aman
+                });
 
-                        function flushNonListBuffer() {
-                            if (nonListBuffer.length > 0) {
-                                // PERUBAHAN: Terapkan formatText dan linkify
-                                htmlItems.push(`<p>${nonListBuffer.map(line => linkify(formatText(line))).join('<br>')}</p>`);
-                                nonListBuffer = [];
-                            }
-                        }
-
-                        function closeCurrentList() {
-                            // PERUBAHAN: Disesuaikan untuk tipe list baru
-                            if (currentListType === 'ol-number' || currentListType === 'ol-letter' || currentListType === 'ol-roman') {
-                                htmlItems.push('</ol>');
-                            } else if (currentListType === 'ul') {
-                                htmlItems.push('</ul>');
-                            }
-                            currentListType = null;
-                        }
-
-                        for (const line of lines) {
-                            const olMatch = line.match(/^(\s*)(\d+)\.\s+(.*)/); 
-                            const letterMatch = line.match(/^(\s*)([a-zA-Z])[\.\)]\s+(.*)/); 
-                            const romanMatch = line.match(/^(\s*)([ivxlcdmIVXLCDM]+)[\.\)]\s+(.*)/); 
-                            const ulMatch = line.match(/^(\s*)[\-\*•]\s+(.*)/); 
-
-                            // PERUBAHAN: Terapkan formatText() dan linkify() ke hasil match
-                            if (olMatch) {
-                                if (currentListType !== 'ol-number') {
-                                    flushNonListBuffer();
-                                    closeCurrentList();
-                                    htmlItems.push('<ol type="1">'); 
-                                    currentListType = 'ol-number';
-                                }
-                                htmlItems.push(`<li>${linkify(formatText(olMatch[3].trim()))}</li>`); 
-                            } else if (letterMatch) {
-                                if (currentListType !== 'ol-letter') {
-                                    flushNonListBuffer();
-                                    closeCurrentList();
-                                    const listType = letterMatch[2].match(/[a-z]/) ? 'a' : 'A';
-                                    htmlItems.push(`<ol type="${listType}">`); 
-                                    currentListType = 'ol-letter';
-                                }
-                                htmlItems.push(`<li>${linkify(formatText(letterMatch[3].trim()))}</li>`);
-                            } else if (romanMatch) {
-                                if (currentListType !== 'ol-roman') {
-                                    flushNonListBuffer();
-                                    closeCurrentList();
-                                    const listType = romanMatch[2].match(/[ivxlcdm]/) ? 'i' : 'I';
-                                    htmlItems.push(`<ol type="${listType}">`); 
-                                    currentListType = 'ol-roman';
-                                }
-                                htmlItems.push(`<li>${linkify(formatText(romanMatch[3].trim()))}</li>`);
-                            } else if (ulMatch) {
-                                if (currentListType !== 'ul') {
-                                    flushNonListBuffer();
-                                    closeCurrentList();
-                                    htmlItems.push('<ul>'); 
-                                    currentListType = 'ul';
-                                }
-                                htmlItems.push(`<li>${linkify(formatText(ulMatch[2].trim()))}</li>`); 
-                            } else {
-                                closeCurrentList(); 
-                                if (line.trim() !== '') {
-                                    nonListBuffer.push(line); // Jangan linkify di sini, tapi di flushNonListBuffer
-                                }
-                            }
-                        }
-
-                        closeCurrentList();
-                        flushNonListBuffer();
+                // BARU: Bersihkan style berantakan dari copy-paste
+                // Hanya akan menyimpan `color` dan membuang sisanya
+                cleaned = cleaned.replace(/ style="(.*?)"/gi, (match, styleString) => {
+                    const colorMatch = styleString.match(/color:\s*([^;"]+)/i);
+                    if (colorMatch) {
+                        // Validasi warna (rgb, hex, atau nama)
+                        const colorValue = colorMatch[1].trim();
                         
-                        return htmlItems.join('\n'); 
-                    })
-                    .join('\n'); // PERUBAHAN: Menggunakan \n tunggal antar paragraf untuk hasil lebih rapat
+                        // PERUBAHAN: Cek apakah ini warna default yang berlebihan
+                        // (Browser terkadang menyisipkan rgb(191, 193, 196) atau #e2e8f0)
+                        const isDefaultColor = /rgb\(191,\s*193,\s*196\)/.test(colorValue) ||
+                                               colorValue.toLowerCase() === '#e2e8f0'; // slate-200
+                        
+                        // Hanya simpan style jika itu warna yang valid DAN BUKAN warna default
+                        if (/^(rgb\([^)]+\)|#[0-9a-fA-F]{3,6}|[a-zA-Z]+)$/.test(colorValue) && !isDefaultColor) {
+                            return ` style="color: ${colorValue};"`;
+                        }
+                    }
+                    return ''; // Hapus style yang tidak valid, tidak diinginkan, atau default
+                });
+
+                // BARU: Hapus semua atribut `data-*`
+                cleaned = cleaned.replace(/ data-[^=]*="[^"]*"/gi, '');
+                // BARU: Hapus semua atribut `class`
+                cleaned = cleaned.replace(/ class="[^"]*"/gi, '');
+
+                // BARU: Strip table tags from Excel/Word copy-paste
+                // Ini akan "meratakan" tabel dan hanya menyimpan teksnya
+                cleaned = cleaned.replace(/<th[^>]*>/gi, ' '); // Ganti <th> pembuka dengan spasi
+                cleaned = cleaned.replace(/<\/th>/gi, '<br>'); // Ganti </th> penutup dengan line break
+                cleaned = cleaned.replace(/<td[^>]*>/gi, ' '); // Ganti <td> pembuka dengan spasi
+                cleaned = cleaned.replace(/<\/td>/gi, '<br>'); // Ganti <td> penutup dengan line break
+                cleaned = cleaned.replace(/<tr[^>]*>/gi, ' '); // Ganti <tr> pembuka dengan spasi
+                cleaned = cleaned.replace(/<\/tr>/gi, '<br>'); // Ganti <tr> penutup dengan line break
+                cleaned = cleaned.replace(/<\/?table[^>]*>/gi, '');
+                cleaned = cleaned.replace(/<\/?tbody[^>]*>/gi, '');
+                cleaned = cleaned.replace(/<\/?thead[^>]*>/gi, '');
+
+
+                // 3. Normalisasi paragraf (browser berbeda membuat tag berbeda)
+                // PERUBAHAN TOTAL PADA LOGIKA PARAGRAF
+                
+                // Hapus <div> atau <p> yang hanya berisi <br> atau kosong
+                cleaned = cleaned.replace(/<(div|p)>\s*(<br\s*\/?>)?\s*<\/(div|p)>/gi, '');
+
+                // Ganti <div> yang tersisa menjadi <p>
+                cleaned = cleaned.replace(/<div>(.*?)<\/div>/gi, '<p>$1</p>');
+                
+                // Hapus <br> yang mungkin ada di akhir paragraf
+                cleaned = cleaned.replace(/<br><\/p>/gi, '</p>');
+                
+                // Tambahkan newline setelah setiap tag penutup paragraf </p>
+                // Ini hanya untuk KETERBACAAN di panel "Hasil HTML (Kode)"
+                cleaned = cleaned.replace(/<\/p>/gi, '</p>\n');
+                
+                // 4. Hapus <p> kosong yang mungkin tersisa
+                cleaned = cleaned.replace(/<p>\s*<\/p>\n?/gi, '');
+
+
+                // HAPUS SEMUA LOGIKA LAMA (split, map, join)
+                /*
+                cleaned = cleaned.replace(/<div><br><\/div>|<div><\/div>/gi, '<p>---BR---</p>'); // Tandai paragraf kosong
+                cleaned = cleaned.replace(/<div>(.*?)<\/div>/gi, '$1<br>'); // Ganti div ke <br>
+                cleaned = cleaned.replace(/<p><br><\/p>|<p><\/p>/gi, '<p>---BR---</p>'); // Tandai paragraf kosong
+                cleaned = cleaned.replace(/<p>(.*?)<\/p>/gi, '$1<br>'); // Ganti p ke <br>
+                // ... sisa logika split/map/join dihapus ...
+                */
+
+                return cleaned.trim(); // Hapus newline terakhir
+            }
+
+            // --- BARU: Fungsi untuk mengubah teks biasa (dari AI) ke paragraf HTML ---
+            function plainTextToHtmlParagraphs(text) {
+                if (!text) return '';
+                return '<p>' + text.trim()
+                    .replace(/\n{2,}/g, '</p><p>') // Dua newline -> paragraf baru
+                    .replace(/\n/g, '<br>') // Satu newline -> line break
+                    + '</p>';
             }
 
             // --- BARU: Fungsi Modal Pesan Kustom ---
@@ -377,18 +345,13 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 alertMessage.textContent = message;
                 alertModal.classList.remove('hidden');
             }
-            // Listener untuk tombol OK pada modal pesan
             alertOkBtn.addEventListener('click', () => {
                 alertModal.classList.add('hidden');
             });
 
-            // --- BARU: Fungsi API Gemini ---
-            const API_KEY = ""; // Biarkan kosong, akan diisi oleh environment
+            // --- BARU: Fungsi API Gemini (Tidak berubah, tapi inputnya diubah) ---
+            const API_KEY = ""; 
             const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
-
-            /**
-             * Melakukan fetch ke API dengan exponential backoff
-             */
             async function fetchWithBackoff(apiUrl, payload, retries = 3, delay = 1000) {
                 try {
                     const response = await fetch(apiUrl, {
@@ -396,47 +359,36 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
-
                     if (!response.ok) {
-                        // Jika 429 (Too Many Requests) dan masih ada percobaan, coba lagi
                         if (response.status === 429 && retries > 0) {
                             await new Promise(resolve => setTimeout(resolve, delay));
                             return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
                         }
-                        // Untuk error lain, langsung lemparkan
                         throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
                     }
                     return response.json();
                 } catch (error) {
-                    // Coba lagi untuk network error atau error lainnya jika masih ada percobaan
                     if (retries > 0) {
                         await new Promise(resolve => setTimeout(resolve, delay));
                         return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
                     }
                     console.error("Gagal melakukan fetch setelah beberapa kali percobaan:", error);
-                    throw error; // Lemparkan error setelah gagal
+                    throw error; 
                 }
             }
-
-            /**
-             * Memanggil API Gemini dengan prompt yang diberikan
-             */
             async function callGemini(prompt, systemInstruction) {
                 loadingModal.classList.remove('hidden');
                 continueBtn.disabled = true;
                 summarizeBtn.disabled = true;
-
                 const payload = {
                     contents: [{ parts: [{ text: prompt }] }],
                     systemInstruction: {
                         parts: [{ text: systemInstruction }]
                     }
                 };
-
                 try {
                     const result = await fetchWithBackoff(API_URL, payload);
                     const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                    
                     if (!text) {
                         throw new Error("Tidak ada konten yang diterima dari API.");
                     }
@@ -444,7 +396,7 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 } catch (error) {
                     console.error("Error memanggil Gemini API:", error);
                     showAlert(`Terjadi kesalahan saat menghubungi AI: ${error.message}`);
-                    return null; // Kembalikan null jika gagal
+                    return null;
                 } finally {
                     loadingModal.classList.add('hidden');
                     continueBtn.disabled = false;
@@ -452,211 +404,148 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 }
             }
             
-            // --- BARU: Fungsi Helper untuk Toolbar Format ---
-            function wrapSelectedText(prefix, suffix) {
-                const start = textInput.selectionStart;
-                const end = textInput.selectionEnd;
-                const selectedText = textInput.value.substring(start, end);
-                
-                if (selectedText.length === 0) {
-                    showAlert("Silakan pilih teks di editor yang ingin Anda format.");
-                    return false;
-                }
-
-                const newText = textInput.value.substring(0, start) + prefix + selectedText + suffix + textInput.value.substring(end);
-                textInput.value = newText;
-                
-                // Memicu event input untuk memperbarui preview
-                textInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-                // Fokus kembali dan pilih teks yang baru diformat
-                textInput.focus();
-                // Menyesuaikan rentang seleksi untuk mencakup tag baru
-                textInput.setSelectionRange(start, start + prefix.length + selectedText.length + suffix.length);
-                return true;
-            }
-
-            // PERUBAHAN: Fungsi toggle format yang lebih generik
-            function toggleFormat(prefix, suffix) {
-                const start = textInput.selectionStart;
-                const end = textInput.selectionEnd;
-                let selectedText = textInput.value.substring(start, end);
-
-                if (selectedText.length === 0) {
-                    showAlert("Silakan pilih teks di editor yang ingin Anda format.");
-                    return;
-                }
-
-                let newText = '';
-                let newStart = start;
-                let newEnd = end;
-
-                // Regex untuk memeriksa apakah SELURUH seleksi adalah tag warna
-                const colorRegex = /^\[color=([a-zA-Z]+|#[0-9a-fA-F]{3,6})\](.*?)\[\/color\]$/;
-                const match = selectedText.match(colorRegex);
-
-                const prefixLen = prefix.length;
-                const suffixLen = suffix.length;
-
-                if (match) {
-                    // KASUS KHUSUS: User memilih seluruh tag [color]...[/color]
-                    // Terapkan/batalkan format HANYA di dalamnya
-                    const colorTag = match[1]; // e.g., #f50000
-                    const innerText = match[2]; // e.g., opsional atau *opsional*
-                    
-                    let newInnerText = '';
-                    if (innerText.startsWith(prefix) && innerText.endsWith(suffix)) {
-                        // Batalkan format di dalam
-                        newInnerText = innerText.substring(prefixLen, innerText.length - suffixLen);
-                        newEnd -= (prefixLen + suffixLen); // Berkurang karakter
-                    } else {
-                        // Terapkan format di dalam
-                        newInnerText = `${prefix}${innerText}${suffix}`;
-                        newEnd += (prefixLen + suffixLen); // Bertambah karakter
-                    }
-                    selectedText = `[color=${colorTag}]${newInnerText}[/color]`;
-
-                } else if (selectedText.startsWith(prefix) && selectedText.endsWith(suffix)) {
-                    // KASUS TOGGLE: User memilih teks format, batalkan
-                    selectedText = selectedText.substring(prefixLen, selectedText.length - suffixLen);
-                    newEnd -= (prefixLen + suffixLen);
-                } else {
-                    // KASUS NORMAL: Terapkan format
-                    selectedText = `${prefix}${selectedText}${suffix}`;
-                    newEnd += (prefixLen + suffixLen);
-                }
-                
-                newText = textInput.value.substring(0, start) + selectedText + textInput.value.substring(end);
-                
-                textInput.value = newText;
-                textInput.dispatchEvent(new Event('input', { bubbles: true }));
-                textInput.focus();
-                textInput.setSelectionRange(newStart, newEnd);
-            }
-
-            
             // --- Event Listeners ---
 
-            // 1. Jalankan fungsi konversi setiap kali pengguna mengetik
+            // 1. PERUBAHAN: Listener input untuk contenteditable
             textInput.addEventListener('input', () => {
-                const plainText = textInput.value;
-                const generatedHtml = convertPlainTextToHtml(plainText);
+                const editorHtml = textInput.innerHTML;
+                const generatedHtml = cleanAndProcessHtml(editorHtml);
 
-                htmlOutput.value = generatedHtml;
-                tabPreview.innerHTML = generatedHtml;
+                htmlOutput.value = generatedHtml; // Panel kanan (Kode)
+                tabPreview.innerHTML = generatedHtml; // Panel kanan (Preview)
 
-                // BARU: Update hitungan kata/karakter
-                const charCount = plainText.length;
-                // Regex \s+ mencocokkan spasi, tab, atau baris baru
-                // filter(Boolean) menghapus string kosong jika ada spasi ganda
-                const wordCount = plainText.trim() === '' ? 0 : plainText.trim().split(/\s+/).filter(Boolean).length;
+                // PERUBAHAN: Gunakan innerText untuk statistik
+                const plainTextForStats = textInput.innerText; 
+                const charCount = plainTextForStats.length;
+                const wordCount = plainTextForStats.trim() === '' ? 0 : plainTextForStats.trim().split(/\s+/).filter(Boolean).length;
                 stats.textContent = `Karakter: ${charCount} | Kata: ${wordCount}`;
             });
 
-            // 2. Fungsi untuk tombol "Salin"
+            // HAPUS SELURUH BLOK 'paste' INI
+            /*
+            // BARU: Menangani 'paste' agar selalu sebagai teks biasa (plain text)
+            // Ini untuk mencegah HTML berantakan saat copy-paste dari sumber lain
+            textInput.addEventListener('paste', (e) => {
+                // Hentikan aksi paste bawaan (yang akan membawa style berantakan)
+                e.preventDefault();
+
+                // Ambil data dari clipboard HANYA sebagai teks biasa
+                const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+
+                // Masukkan teks biasa tersebut ke editor
+                // Ini adalah cara standar untuk menyisipkan teks tanpa format
+                document.execCommand('insertText', false, text);
+
+                // Memicu event input secara manual agar panel kanan (HTML) diperbarui
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+            */
+
+
+            // 2. Tombol "Salin" (Tidak berubah, masih menyalin dari htmlOutput)
             copyBtn.addEventListener('click', () => {
                 if (!htmlOutput.value) return; 
-
                 htmlOutput.select();
                 htmlOutput.setSelectionRange(0, 99999); 
-                
                 try {
                     document.execCommand('copy');
-                    
                     copyMessage.classList.remove('hidden');
                     setTimeout(() => copyMessage.classList.add('opacity-100'), 10); 
-                    
                     setTimeout(() => {
                         copyMessage.classList.remove('opacity-100');
                         setTimeout(() => copyMessage.classList.add('hidden'), 300); 
                     }, 2000);
-
                 } catch (err) {
                     console.error('Gagal menyalin teks: ', err);
                 }
-                
                 window.getSelection().removeAllRanges();
             });
 
-            // 3. FUNGSI BARU: Tombol "Bersihkan"
+            // 3. PERUBAHAN: Tombol "Bersihkan"
             clearBtn.addEventListener('click', () => {
-                textInput.value = "";
-                // Memicu event 'input' secara manual untuk memperbarui panel kanan
+                textInput.innerHTML = ""; // Ganti dari .value ke .innerHTML
                 textInput.dispatchEvent(new Event('input', { bubbles: true }));
-                // BARU: Reset stats secara manual (opsional, karena event di atas sudah menanganinya)
-                // stats.textContent = `Karakter: 0 | Kata: 0`;
             });
 
-            // --- BARU: Event Listeners Toolbar Format ---
-            // PERUBAHAN: Menggunakan fungsi toggleFormat baru
-            formatItalicBtn.addEventListener('click', () => {
-                toggleFormat('*', '*');
+            // --- PERUBAHAN BESAR: Event Listeners Toolbar Format ---
+            // Menggunakan document.execCommand untuk editor WYSIWYG
+            
+            function applyFormat(command, value = null) {
+                // e.preventDefault() mencegah editor kehilangan fokus
+                document.execCommand(command, false, value);
+                textInput.focus(); // Fokus kembali ke editor
+                // Memicu event input secara manual agar panel kanan diperbarui
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+
+            formatBoldBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyFormat('bold');
             });
 
-            // BARU: Listener untuk Bold dan Strikethrough
-            formatBoldBtn.addEventListener('click', () => {
-                toggleFormat('**', '**');
+            formatItalicBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyFormat('italic');
             });
 
-            formatStrikethroughBtn.addEventListener('click', () => {
-                toggleFormat('~~', '~~');
+            formatStrikethroughBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyFormat('strikethrough');
             });
 
-            formatColorBtn.addEventListener('click', () => {
-                const color = colorPicker.value;
-                // Fungsi wrapSelectedText masih OK untuk tombol warna (karena tidak toggle)
-                wrapSelectedText(`[color=${color}]`, `[/color]`);
+            formatColorBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyFormat('foreColor', colorPicker.value);
             });
 
-            // --- BARU: Event Listeners Tombol Gemini ---
+            // --- PERUBAHAN: Event Listeners Tombol Gemini ---
             continueBtn.addEventListener('click', async () => {
-                const currentText = textInput.value;
+                // PERUBAHAN: Gunakan innerText untuk mendapat teks biasa
+                const currentText = textInput.innerText; 
                 if (!currentText.trim()) {
                     showAlert("Editor masih kosong. Tulis sesuatu untuk dilanjutkan.");
                     return;
                 }
-
                 const systemPrompt = "Anda adalah asisten penulis AI. Lanjutkan teks yang diberikan oleh pengguna dengan mulus. Fokus hanya pada penambahan konten baru. JANGAN ulangi teks yang ada. Langsung berikan teks lanjutannya saja tanpa pengantar apa pun.";
                 const prompt = `Ini adalah teks yang ada:\n\"\"\"${currentText}\"\"\"\n\Lanjutkan tulisan ini:`;
                 
                 const continuation = await callGemini(prompt, systemPrompt);
                 
                 if (continuation) {
-                    textInput.value = currentText + "\n\n" + continuation.trim();
-                    // Picu event input untuk memperbarui preview HTML dan statistik
+                    // PERUBAHAN: Sisipkan HTML ke contenteditable
+                    textInput.focus();
+                    const htmlToInsert = plainTextToHtmlParagraphs('\n' + continuation.trim());
+                    document.execCommand('insertHTML', false, htmlToInsert);
+                    
                     textInput.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             });
 
             summarizeBtn.addEventListener('click', async () => {
-                const currentText = textInput.value;
+                // PERUBAHAN: Gunakan innerText
+                const currentText = textInput.innerText;
                 if (!currentText.trim()) {
                     showAlert("Editor masih kosong. Tulis sesuatu untuk diringkas.");
                     return;
                 }
-
                 const systemPrompt = "Anda adalah asisten AI yang ahli meringkas. Buat ringkasan yang jelas dan padat dari teks yang diberikan. Langsung berikan hasil ringkasannya saja tanpa pengantar apa pun.";
                 const prompt = `Ringkas teks ini:\n\"\"\"${currentText}\"\"\"`;
                 
                 const summary = await callGemini(prompt, systemPrompt);
                 
                 if (summary) {
-                    textInput.value = summary.trim();
-                    // Picu event input untuk memperbarui preview HTML dan statistik
+                    // PERUBAHAN: Set innerHTML dengan paragraf yang diformat
+                    textInput.innerHTML = plainTextToHtmlParagraphs(summary.trim());
                     textInput.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             });
 
-
-            // 5. Fungsi untuk mengelola Tab
+            // 5. Fungsi Tab (Tidak berubah)
             tabKodeBtn.addEventListener('click', () => {
                 tabKode.classList.remove('hidden');
                 tabPreview.classList.add('hidden');
-                
-                // PERUBAHAN: Menggunakan 'slate'
                 tabKodeBtn.classList.add('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
                 tabKodeBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                
                 tabPreviewBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
                 tabPreviewBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
             });
@@ -664,13 +553,10 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             tabPreviewBtn.addEventListener('click', () => {
                 tabKode.classList.add('hidden');
                 tabPreview.classList.remove('hidden');
-
-                // PERUBAHAN: Menggunakan 'slate'
                 tabPreviewBtn.classList.add('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
                 tabPreviewBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                
                 tabKodeBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400'); // Perbaikan typo 4s00 -> 400
+                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400'); 
             });
 
         });
