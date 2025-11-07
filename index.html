@@ -167,7 +167,7 @@
         #textInput li {
             margin-bottom: 4px;
         }
-    </link>
+    </style>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center p-4">
 
@@ -261,7 +261,6 @@
                     </div>
                     
                     <!-- Tab Content: Preview -->
-                    <div id="tabPreview" class="hidden w-full h-[350px] bg-white text-slate-900 border border-slate-700 rounded-b-lg rounded-tr-lg p-4 overflow-auto">
                     <div id="tabPreview" class="hidden w-full h-[350px] rounded-b-lg rounded-tr-lg overflow-auto">
                         <!-- Preview akan dirender di sini -->
                     </div>
@@ -337,7 +336,7 @@
             const tabPreview = document.getElementById('tabPreview');
 
             // --- Logika Inti: Pembersih HTML ---
-            function cleanAndProcessHtml(rawHtml) {
+            function cleanExistingHtml(rawHtml) { // Fungsi untuk membersihkan HTML yang sudah ada di editor
                 if (!rawHtml.trim()) {
                     return "";
                 }
@@ -548,12 +547,25 @@
 
                 // Jika ada konten HTML, gunakan itu. Jika tidak, gunakan teks biasa.
                 let contentToInsert = pasteHtml || pasteText;
+                let processedHtml = '';
+                if (pasteText) { // Prioritaskan plainText karena lebih mudah diproses logika pintar
+                    processedHtml = convertRawTextToStructuredHtml(pasteText);
+                } else if (pasteHtml) {
+                    // Buat elemen sementara untuk mengekstrak plain text dari pasteHtml
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = pasteHtml;
+                    const plainTextFromHtml = tempDiv.innerText; // innerText lebih baik dalam mempertahankan format baris
+                    processedHtml = convertRawTextToStructuredHtml(plainTextFromHtml);
+                } else {
+                    return; // Tidak ada data untuk ditempel
+                }
 
                 // Bersihkan HTML yang ditempel sebelum dimasukkan ke editor
                 const cleanedPaste = cleanAndProcessHtml(contentToInsert);
 
                 // Masukkan HTML yang sudah bersih ke posisi kursor
                 document.execCommand('insertHTML', false, cleanedPaste);
+                document.execCommand('insertHTML', false, processedHtml);
 
                 // Memicu event input secara manual
                 textInput.dispatchEvent(new Event('input', { bubbles: true }));
@@ -1053,6 +1065,7 @@
 
             // --- Logika Inti: Pembersih HTML ---
             function cleanAndProcessHtml(rawHtml) {
+            function cleanExistingHtml(rawHtml) { // Fungsi untuk membersihkan HTML yang sudah ada di editor
                 if (!rawHtml.trim()) {
                     return "";
                 }
@@ -1220,6 +1233,7 @@
             textInput.addEventListener('input', () => {
                 const rawHtml = textInput.innerHTML;
                 const generatedHtml = cleanAndProcessHtml(rawHtml);
+                const generatedHtml = cleanExistingHtml(rawHtml); // Gunakan cleanExistingHtml untuk konten editor
 
                 htmlOutput.value = generatedHtml;
                 tabPreview.innerHTML = generatedHtml;
