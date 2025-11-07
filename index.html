@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-R">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konverter Teks Biasa ke HTML (dengan AI)</title>
+    <title>Konverter Teks Biasa ke HTML</title>
     <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Menambahkan Google Font "Inter" -->
@@ -52,6 +52,21 @@
                 transform: rotate(360deg);
             }
         }
+        /* BARU: Style untuk tombol format */
+        .format-btn {
+            background-color: #334155; /* bg-slate-700 */
+            color: #cbd5e1; /* text-slate-300 */
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid #475569; /* border-slate-600 */
+        }
+        .format-btn:hover {
+            background-color: #475569; /* bg-slate-600 */
+            color: #e2e8f0; /* text-slate-200 */
+        }
     </style>
 </head>
 <!-- PERUBAHAN: Menggunakan palet warna 'slate' yang lebih modern -->
@@ -59,7 +74,7 @@
 
     <!-- Kontainer utama aplikasi -->
     <div class="bg-slate-800 p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-6xl"> 
-        <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML (dengan AI)</h1>
+        <h1 class="text-3xl font-bold mb-4 text-center text-cyan-400">Konverter Teks ke HTML</h1>
         <p class="text-center text-slate-400 mb-8">Tulis atau tempel teks biasa di editor kiri. Kode HTML akan otomatis dibuat di sebelah kanan.</p>
 
         <!-- Grid untuk input dan output -->
@@ -69,6 +84,23 @@
             <div>
                 <label for="textInput" class="block mb-2 text-lg font-semibold text-slate-300">Editor Teks (Input)</label>
                 
+                <!-- BARU: Toolbar Format -->
+                <div class="flex items-center gap-2 mb-2 p-2 bg-slate-700 rounded-lg">
+                    <button id="formatBoldBtn" class="format-btn font-bold" title="Buat tebal (Pilih teks & klik)">
+                        B
+                    </button>
+                    <button id="formatItalicBtn" class="format-btn italic" title="Buat miring (Pilih teks & klik)">
+                        I
+                    </button>
+                    <button id="formatStrikethroughBtn" class="format-btn line-through" title="Buat coret (Pilih teks & klik)">
+                        S
+                    </button>
+                    <button id="formatColorBtn" class="format-btn" title="Terapkan warna (Pilih teks & klik)">
+                        Terapkan Warna
+                    </button>
+                    <input type="color" id="colorPicker" value="#FFFFFF" class="h-8 w-10 p-0 border-none rounded cursor-pointer bg-slate-700" title="Pilih warna">
+                </div>
+
                 <!-- PERUBAHAN: class font-mono dihapus, agar menggunakan font default (Inter) -->
                 <textarea id="textInput" 
                      class="w-full h-[350px] bg-slate-900 border border-slate-700 rounded-lg p-4 text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition duration-300 overflow-auto" 
@@ -189,6 +221,13 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             const alertMessage = document.getElementById('alertMessage');
             const alertOkBtn = document.getElementById('alertOkBtn');
 
+            // BARU: Elemen Toolbar Format
+            const formatBoldBtn = document.getElementById('formatBoldBtn'); // BARU
+            const formatItalicBtn = document.getElementById('formatItalicBtn');
+            const formatStrikethroughBtn = document.getElementById('formatStrikethroughBtn'); // BARU
+            const formatColorBtn = document.getElementById('formatColorBtn');
+            const colorPicker = document.getElementById('colorPicker');
+
             const tabKodeBtn = document.getElementById('tabKodeBtn');
             const tabPreviewBtn = document.getElementById('tabPreviewBtn');
             const tabKode = document.getElementById('tabKode');
@@ -211,13 +250,32 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
 
             // --- FUNGSI HELPER BARU: Deteksi Format Markdown ---
             function formatText(text) {
+                // PERUBAHAN: Jalankan format warna DULU agar tidak bentrok
+                let formattedText = text;
+
+                // BARU: Terapkan format warna
+                // Regex aman: hanya mengizinkan nama warna (alphabet) atau kode hex (#)
+                // Ini akan mencari [color=#hex]teks[/color] atau [color=red]teks[/color]
+                const colorRegex = /\[color=([a-zA-Z]+|#[0-9a-fA-F]{3,6})\](.*?)\[\/color\]/g;
+                formattedText = formattedText.replace(colorRegex, (match, color, innerText) => {
+                    // Sanitasi sederhana: Pastikan format warna aman
+                    if (/^([a-zA-Z]+|#[0-9a-fA-F]{3,6})$/.test(color)) {
+                        return `<span style="color: ${color};">${innerText}</span>`;
+                    }
+                    return innerText; // Kembalikan teks asli jika format warna tidak aman
+                });
+
                 // Urutan penting agar ** diproses sebelum *
-                return text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/__(.*?)__/g, '<strong>$1</strong>') // Bold (underscore)
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')     // Italic
-                    .replace(/_(.*?)_/g, '<em>$1</em>')     // Italic (underscore)
-                    .replace(/~~(.*?)~~/g, '<s>$1</s>');    // Strikethrough
+                // PERUBAHAN: Regex ini sekarang lebih aman dan mengabaikan tag HTML
+                // Ini mencegahnya merusak tag <span> dari warna
+                formattedText = formattedText
+                    .replace(/\*\*(?![^<]*>)(.*?)(?![^<]*>)\*\*/g, '<strong>$1</strong>') // Bold
+                    .replace(/__(?![^<]*>)(.*?)(?![^<]*>)__/g, '<strong>$1</strong>') // Bold (underscore)
+                    .replace(/\*(?![^<]*>)(.*?)(?![^<]*>)\*/g, '<em>$1</em>')     // Italic
+                    .replace(/_(?![^<]*>)(.*?)(?![^<]*>)_/g, '<em>$1</em>')     // Italic (underscore)
+                    .replace(/~~(?![^<]*>)(.*?)(?![^<]*>)~~/g, '<s>$1</s>');    // Strikethrough
+                
+                return formattedText;
             }
 
 
@@ -319,18 +377,16 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 alertModal.classList.add('hidden');
             });
 
-            // --- DIPERBARUI: Fungsi API Gemini ---
-
-            // URL API tidak lagi diperlukan di sini, kita akan memanggil fungsi Netlify kita
-            // const API_KEY = ""; // TIDAK PERLU
-            // const API_URL = ... // TIDAK PERLU
+            // --- BARU: Fungsi API Gemini ---
+            const API_KEY = ""; // Biarkan kosong, akan diisi oleh environment
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${API_KEY}`;
 
             /**
-             * Melakukan fetch ke Netlify Function kita dengan exponential backoff
+             * Melakukan fetch ke API dengan exponential backoff
              */
-            async function fetchWithBackoff(netlifyFunctionUrl, payload, retries = 3, delay = 1000) {
+            async function fetchWithBackoff(apiUrl, payload, retries = 3, delay = 1000) {
                 try {
-                    const response = await fetch(netlifyFunctionUrl, {
+                    const response = await fetch(apiUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
@@ -340,24 +396,17 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                         // Jika 429 (Too Many Requests) dan masih ada percobaan, coba lagi
                         if (response.status === 429 && retries > 0) {
                             await new Promise(resolve => setTimeout(resolve, delay));
-                            return fetchWithBackoff(netlifyFunctionUrl, payload, retries - 1, delay * 2);
+                            return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
                         }
-                        // Untuk error lain, coba parse body untuk pesan error
-                        let errorMsg = `HTTP error! status: ${response.status} ${response.statusText}`;
-                        try {
-                            const errBody = await response.json();
-                            if(errBody.error) errorMsg = errBody.error;
-                        } catch(e) {
-                            // biarkan errorMsg default
-                        }
-                        throw new Error(errorMsg);
+                        // Untuk error lain, langsung lemparkan
+                        throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
                     }
-                    return response.json(); // Netlify function kita akan mengembalikan { text: "..." }
+                    return response.json();
                 } catch (error) {
                     // Coba lagi untuk network error atau error lainnya jika masih ada percobaan
                     if (retries > 0) {
                         await new Promise(resolve => setTimeout(resolve, delay));
-                        return fetchWithBackoff(netlifyFunctionUrl, payload, retries - 1, delay * 2);
+                        return fetchWithBackoff(apiUrl, payload, retries - 1, delay * 2);
                     }
                     console.error("Gagal melakukan fetch setelah beberapa kali percobaan:", error);
                     throw error; // Lemparkan error setelah gagal
@@ -365,31 +414,30 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
             }
 
             /**
-             * Memanggil API Gemini melalui Netlify Function
+             * Memanggil API Gemini dengan prompt yang diberikan
              */
             async function callGemini(prompt, systemInstruction) {
                 loadingModal.classList.remove('hidden');
                 continueBtn.disabled = true;
                 summarizeBtn.disabled = true;
 
-                // Payload ini akan dikirim ke Netlify Function kita
                 const payload = {
-                    prompt: prompt,
-                    systemInstruction: systemInstruction
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: {
+                        parts: [{ text: systemInstruction }]
+                    }
                 };
 
                 try {
-                    // Panggil Netlify Function kita
-                    const result = await fetchWithBackoff("/.netlify/functions/gemini-proxy", payload);
-                    
-                    const text = result.text; // Dapatkan teks dari respons function
+                    const result = await fetchWithBackoff(API_URL, payload);
+                    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
                     
                     if (!text) {
                         throw new Error("Tidak ada konten yang diterima dari API.");
                     }
                     return text;
                 } catch (error) {
-                    console.error("Error memanggil Netlify Function:", error);
+                    console.error("Error memanggil Gemini API:", error);
                     showAlert(`Terjadi kesalahan saat menghubungi AI: ${error.message}`);
                     return null; // Kembalikan null jika gagal
                 } finally {
@@ -398,6 +446,89 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                     summarizeBtn.disabled = false;
                 }
             }
+            
+            // --- BARU: Fungsi Helper untuk Toolbar Format ---
+            function wrapSelectedText(prefix, suffix) {
+                const start = textInput.selectionStart;
+                const end = textInput.selectionEnd;
+                const selectedText = textInput.value.substring(start, end);
+                
+                if (selectedText.length === 0) {
+                    showAlert("Silakan pilih teks di editor yang ingin Anda format.");
+                    return false;
+                }
+
+                const newText = textInput.value.substring(0, start) + prefix + selectedText + suffix + textInput.value.substring(end);
+                textInput.value = newText;
+                
+                // Memicu event input untuk memperbarui preview
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+                // Fokus kembali dan pilih teks yang baru diformat
+                textInput.focus();
+                // Menyesuaikan rentang seleksi untuk mencakup tag baru
+                textInput.setSelectionRange(start, start + prefix.length + selectedText.length + suffix.length);
+                return true;
+            }
+
+            // PERUBAHAN: Fungsi toggle format yang lebih generik
+            function toggleFormat(prefix, suffix) {
+                const start = textInput.selectionStart;
+                const end = textInput.selectionEnd;
+                let selectedText = textInput.value.substring(start, end);
+
+                if (selectedText.length === 0) {
+                    showAlert("Silakan pilih teks di editor yang ingin Anda format.");
+                    return;
+                }
+
+                let newText = '';
+                let newStart = start;
+                let newEnd = end;
+
+                // Regex untuk memeriksa apakah SELURUH seleksi adalah tag warna
+                const colorRegex = /^\[color=([a-zA-Z]+|#[0-9a-fA-F]{3,6})\](.*?)\[\/color\]$/;
+                const match = selectedText.match(colorRegex);
+
+                const prefixLen = prefix.length;
+                const suffixLen = suffix.length;
+
+                if (match) {
+                    // KASUS KHUSUS: User memilih seluruh tag [color]...[/color]
+                    // Terapkan/batalkan format HANYA di dalamnya
+                    const colorTag = match[1]; // e.g., #f50000
+                    const innerText = match[2]; // e.g., opsional atau *opsional*
+                    
+                    let newInnerText = '';
+                    if (innerText.startsWith(prefix) && innerText.endsWith(suffix)) {
+                        // Batalkan format di dalam
+                        newInnerText = innerText.substring(prefixLen, innerText.length - suffixLen);
+                        newEnd -= (prefixLen + suffixLen); // Berkurang karakter
+                    } else {
+                        // Terapkan format di dalam
+                        newInnerText = `${prefix}${innerText}${suffix}`;
+                        newEnd += (prefixLen + suffixLen); // Bertambah karakter
+                    }
+                    selectedText = `[color=${colorTag}]${newInnerText}[/color]`;
+
+                } else if (selectedText.startsWith(prefix) && selectedText.endsWith(suffix)) {
+                    // KASUS TOGGLE: User memilih teks format, batalkan
+                    selectedText = selectedText.substring(prefixLen, selectedText.length - suffixLen);
+                    newEnd -= (prefixLen + suffixLen);
+                } else {
+                    // KASUS NORMAL: Terapkan format
+                    selectedText = `${prefix}${selectedText}${suffix}`;
+                    newEnd += (prefixLen + suffixLen);
+                }
+                
+                newText = textInput.value.substring(0, start) + selectedText + textInput.value.substring(end);
+                
+                textInput.value = newText;
+                textInput.dispatchEvent(new Event('input', { bubbles: true }));
+                textInput.focus();
+                textInput.setSelectionRange(newStart, newEnd);
+            }
+
             
             // --- Event Listeners ---
 
@@ -451,6 +582,27 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 // stats.textContent = `Karakter: 0 | Kata: 0`;
             });
 
+            // --- BARU: Event Listeners Toolbar Format ---
+            // PERUBAHAN: Menggunakan fungsi toggleFormat baru
+            formatItalicBtn.addEventListener('click', () => {
+                toggleFormat('*', '*');
+            });
+
+            // BARU: Listener untuk Bold dan Strikethrough
+            formatBoldBtn.addEventListener('click', () => {
+                toggleFormat('**', '**');
+            });
+
+            formatStrikethroughBtn.addEventListener('click', () => {
+                toggleFormat('~~', '~~');
+            });
+
+            formatColorBtn.addEventListener('click', () => {
+                const color = colorPicker.value;
+                // Fungsi wrapSelectedText masih OK untuk tombol warna (karena tidak toggle)
+                wrapSelectedText(`[color=${color}]`, `[/color]`);
+            });
+
             // --- BARU: Event Listeners Tombol Gemini ---
             continueBtn.addEventListener('click', async () => {
                 const currentText = textInput.value;
@@ -460,7 +612,7 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 }
 
                 const systemPrompt = "Anda adalah asisten penulis AI. Lanjutkan teks yang diberikan oleh pengguna dengan mulus. Fokus hanya pada penambahan konten baru. JANGAN ulangi teks yang ada. Langsung berikan teks lanjutannya saja tanpa pengantar apa pun.";
-                const prompt = `Ini adalah teks yang ada:\n\"\"\"${currentText}\"\"\"\n\nLanjutkan tulisan ini:`;
+                const prompt = `Ini adalah teks yang ada:\n\"\"\"${currentText}\"\"\"\n\Lanjutkan tulisan ini:`;
                 
                 const continuation = await callGemini(prompt, systemPrompt);
                 
@@ -513,11 +665,10 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 tabPreviewBtn.classList.remove('bg-slate-800', 'text-slate-400', 'border-slate-700');
                 
                 tabKodeBtn.classList.add('bg-slate-800', 'text-slate-400', 'border-slate-700');
-                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400');
+                tabKodeBtn.classList.remove('bg-slate-700', 'text-cyan-400', 'z-10', 'border-cyan-400'); // Perbaikan typo 4s00 -> 400
             });
 
         });
     </script>
 </body>
 </html>
-
