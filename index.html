@@ -271,8 +271,13 @@ Coba juga format **teks tebal**, *teks miring*, atau ~~teks dicoret~~.
                 formattedText = formattedText
                     .replace(/\*\*(?![^<]*>)(.*?)(?![^<]*>)\*\*/g, '<strong>$1</strong>') // Bold
                     .replace(/__(?![^<]*>)(.*?)(?![^<]*>)__/g, '<strong>$1</strong>') // Bold (underscore)
-                    .replace(/\*(?![^<]*>)(.*?)(?![^<]*>)\*/g, '<em>$1</em>')     // Italic
-                    .replace(/_(?![^<]*>)(.*?)(?![^<]*>)_/g, '<em>$1</em>')     // Italic (underscore)
+                    
+                    // PERBAIKAN: Regex Italic ini sekarang lebih pintar.
+                    // Ia mencari *teks* tetapi mengabaikan **teks** (karena [^\s*] berarti "bukan spasi atau bintang")
+                    // Ini mencegahnya merusak sintaks Bold atau sintaks yang salah.
+                    .replace(/\*([^\s*](?:.|\n)*?)\*/g, '<em>$1</em>')     // Italic
+                    
+                    .replace(/_(?![^<]*>)(.*?)(?![^<]*>)_/g, '<em>$1</em>')     // Italic (underscore) - Biarkan yang ini untuk kompatibilitas
                     .replace(/~~(?![^<]*>)(.*?)(?![^<]*>)~~/g, '<s>$1</s>');    // Strikethrough
                 
                 return formattedText;
