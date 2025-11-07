@@ -288,46 +288,76 @@
 
                 // BARU: Strip table tags from Excel/Word copy-paste
                 // Ini akan "meratakan" tabel dan hanya menyimpan teksnya
-                cleaned = cleaned.replace(/<th[^>]*>/gi, ' '); // Ganti <th> pembuka dengan spasi
-                cleaned = cleaned.replace(/<\/th>/gi, '<br>'); // Ganti </th> penutup dengan line break
-                cleaned = cleaned.replace(/<td[^>]*>/gi, ' '); // Ganti <td> pembuka dengan spasi
-                cleaned = cleaned.replace(/<\/td>/gi, '<br>'); // Ganti <td> penutup dengan line break
-                cleaned = cleaned.replace(/<tr[^>]*>/gi, ' '); // Ganti <tr> pembuka dengan spasi
-                cleaned = cleaned.replace(/<\/tr>/gi, '<br>'); // Ganti <tr> penutup dengan line break
+                
+                // PEROMBAKAN LOGIKA TABEL:
+                // 1. Ambil konten dari dalam sel <th> dan <td>, tambahkan <br> setelahnya
+                // PERBAIKAN: Gunakan [\s\S]*? untuk mencocokkan newline di dalam sel
+                cleaned = cleaned.replace(/<th[^>]*>([\s\S]*?)<\/th>/gi, '<strong>$1</strong><br>');
+                cleaned = cleaned.replace(/<td[^>]*>([\s\S]*?)<\/td>/gi, '$1<br>');
+
+                // 2. Hapus semua tag tabel lainnya
+                cleaned = cleaned.replace(/<\/?tr[^>]*>/gi, '');
                 cleaned = cleaned.replace(/<\/?table[^>]*>/gi, '');
                 cleaned = cleaned.replace(/<\/?tbody[^>]*>/gi, '');
                 cleaned = cleaned.replace(/<\/?thead[^>]*>/gi, '');
+                
+                // 3. Hapus <br> ganda yang mungkin muncul
+                cleaned = cleaned.replace(/<br>\s*<br>/gi, '<br>');
 
 
                 // 3. Normalisasi paragraf (browser berbeda membuat tag berbeda)
-                // PERUBAHAN TOTAL PADA LOGIKA PARAGRAF
                 
                 // Hapus <div> atau <p> yang hanya berisi <br> atau kosong
                 cleaned = cleaned.replace(/<(div|p)>\s*(<br\s*\/?>)?\s*<\/(div|p)>/gi, '');
 
-                // Ganti <div> yang tersisa menjadi <p>
-                cleaned = cleaned.replace(/<div>(.*?)<\/div>/gi, '<p>$1</p>');
+                // Ganti <div> yang tersisa (yang dibuat editor per baris) menjadi <p>
+                cleaned = cleaned.replace(/<div>([\s\S]*?)<\/div>/gi, '<p>$1</p>');
                 
-                // Hapus <br> yang mungkin ada di akhir paragraf
-                cleaned = cleaned.replace(/<br><\/p>/gi, '</p>');
                 
-                // Tambahkan newline setelah setiap tag penutup paragraf </p>
-                // Ini hanya untuk KETERBACAAN di panel "Hasil HTML (Kode)"
+                // PERBAIKAN KUNCI: HAPUS LOGIKA YANG SALAH INI
+                // cleaned = cleaned.replace(/<br\s*\/?>/gi, '</p><p>');
+
+                // Bungkus teks yatim (jika ada) yang tidak terbungkus tag
+                let trimmedCleaned = cleaned.trim();
+                
+                // Logika ini terlalu rumit dan mungkin menyebabkan masalah.
+                // Editor contenteditable seharusnya SELALU membungkus dalam <div> atau <p>
+                // Kita sederhanakan saja.
+                
+                // Hapus <br> di awal atau akhir paragraf
+                cleaned = cleaned.replace(/<p>\s*<br\s*\/?>/gi, '<p>');
+                cleaned = cleaned.replace(/<br\s*\/?>\s*<\/p>/gi, '</p>');
+                
+                // Hapus <p> kosong yang mungkin dibuat
+                cleaned = cleaned.replace(/<p>\s*<\/p>/gi, '');
+                
+                // Tambahkan newline setelah setiap </p> untuk keterbacaan di "Hasil HTML"
                 cleaned = cleaned.replace(/<\/p>/gi, '</p>\n');
-                
-                // 4. Hapus <p> kosong yang mungkin tersisa
-                cleaned = cleaned.replace(/<p>\s*<\/p>\n?/gi, '');
 
 
-                // HAPUS SEMUA LOGIKA LAMA (split, map, join)
+                // HAPUS SEMUA LOGIKA LAMA (if/else, split, map, join)
                 /*
-                cleaned = cleaned.replace(/<div><br><\/div>|<div><\/div>/gi, '<p>---BR---</p>'); // Tandai paragraf kosong
-                cleaned = cleaned.replace(/<div>(.*?)<\/div>/gi, '$1<br>'); // Ganti div ke <br>
-                cleaned = cleaned.replace(/<p><br><\/p>|<p><\/p>/gi, '<p>---BR---</p>'); // Tandai paragraf kosong
-                cleaned = cleaned.replace(/<p>(.*?)<\/p>/gi, '$1<br>'); // Ganti p ke <br>
-                // ... sisa logika split/map/join dihapus ...
-                */
+                // 1. Ganti SEMUA <br> dengan tag paragraf penutup dan pembuka
+                // Ini akan secara efektif mengubah setiap "pindah baris" menjadi "paragraf baru"
+                cleaned = cleaned.replace(/<br\s*\/?>/gi, '</p><p>');
 
+                // 2. Bungkus semua yang tersisa (jika belum) dengan <p>
+                let trimmedCleaned = cleaned.trim();
+                if (trimmedCleaned.length > 0 && !trimmedCleaned.startsWith('<p>')) {
+                    trimmedCleaned = `<p>${trimmedCleaned}`;
+                }
+                if (trimmedCleaned.length > 0 && !trimmedCleaned.endsWith('</p>')) {
+                    trimmedCleaned = `${trimmedCleaned}</p>`;
+                }
+                cleaned = trimmedCleaned;
+
+                // 3. Hapus <p> kosong yang mungkin dibuat
+                cleaned = cleaned.replace(/<p>\s*<\/p>/gi, '');
+                
+                // 4. Tambahkan newline setelah setiap </p> untuk keterbacaan
+                cleaned = cleaned.replace(/<\/p>/gi, '</p>\n');
+                */
+                
                 return cleaned.trim(); // Hapus newline terakhir
             }
 
