@@ -405,75 +405,95 @@
                 
                 if (trimmedCleaned.length > 0 && !trimmedCleaned.startsWith('<p>') && !trimmedCleaned.startsWith('<ol>') && !trimmedCleaned.startsWith('<ul>')) {
                     
-                    // LOGIKA "PINTAR" BARU UNTUK MEMBACA TEKS BIASA
+                    // --- PERBAIKAN TOTAL: LOGIKA SUPER PINTAR UNTUK NESTED LIST DENGAN INDENTASI ---
                     const lines = trimmedCleaned.split(/<br\s*\/?>/gi);
                     let newHtmlBlocks = [];
-                    let currentList = null; // null, 'ol-1', 'ol-a', 'ol-i', 'ul'
+                    const listStack = []; // Untuk melacak list bertingkat
 
                     // Regex untuk mendeteksi list
+                    const indentRegex = /^(\s*)/;
                     const numList = /^\s*(\d+)\.\s+(.*)/;
                     const letterList = /^\s*([a-z])\.\s+(.*)/i; // i = case-insensitive
                     const romanList = /^\s*([ivxlcdm]+)\.\s+(.*)/i;
                     const bulletList = /^\s*([\-\*•])\s+(.*)/;
 
-                    function closeCurrentList() {
-                        if (currentList) {
-                            if (currentList.startsWith('ol')) newHtmlBlocks.push('</ol>\n');
-                            if (currentList === 'ul') newHtmlBlocks.push('</ul>\n');
+                    function closeListsUntil(level) {
+                        while (listStack.length > level) {
+                            const listInfo = listStack.pop();
+                            newHtmlBlocks.push(`</${listInfo.tag}>\n`);
                         }
-                        currentList = null;
                     }
 
                     for (const line of lines) {
-                        let trimmedLine = line.trim();
-                        if (trimmedLine.length === 0) {
-                            closeCurrentList(); // Baris kosong menutup list
+                        if (line.trim().length === 0) {
+                            closeListsUntil(0); // Baris kosong menutup semua list
                             continue;
                         }
 
+                        const indentMatch = line.match(indentRegex);
+                        const indent = indentMatch ? indentMatch[1].length : 0;
+                        const trimmedLine = line.trim();
+
                         let match;
+                        let listTag = null;
+                        let listHtmlType = null;
+                        let content = '';
 
                         if ((match = trimmedLine.match(numList))) {
-                            let type = '1';
-                            if (currentList !== `ol-${type}`) {
-                                closeCurrentList();
-                                newHtmlBlocks.push(`<ol type="${type}">\n`);
-                                currentList = `ol-${type}`;
-                            }
-                            newHtmlBlocks.push(`<li>${match[2]}</li>\n`);
+                            listTag = 'ol';
+                            listHtmlType = '1';
+                            content = match[2];
                         } else if ((match = trimmedLine.match(letterList))) {
-                            let type = match[1].match(/[a-z]/) ? 'a' : 'A';
-                            if (currentList !== `ol-${type}`) {
-                                closeCurrentList();
-                                newHtmlBlocks.push(`<ol type="${type}">\n`);
-                                currentList = `ol-${type}`;
-                            }
-                            newHtmlBlocks.push(`<li>${match[2]}</li>\n`);
+                            listTag = 'ol';
+                            listHtmlType = match[1].match(/[a-z]/) ? 'a' : 'A';
+                            content = match[2];
                         } else if ((match = trimmedLine.match(romanList))) {
-                            let type = match[1].match(/[ivx]/) ? 'i' : 'I';
-                             if (currentList !== `ol-${type}`) {
-                                closeCurrentList();
-                                newHtmlBlocks.push(`<ol type="${type}">\n`);
-                                currentList = `ol-${type}`;
-                            }
-                            newHtmlBlocks.push(`<li>${match[2]}</li>\n`);
+                            listTag = 'ol';
+                            listHtmlType = match[1].match(/[ivx]/) ? 'i' : 'I';
+                            content = match[2];
                         } else if ((match = trimmedLine.match(bulletList))) {
-                            if (currentList !== 'ul') {
-                                closeCurrentList();
-                                newHtmlBlocks.push(`<ul>\n`);
-                                currentList = 'ul';
+                            listTag = 'ul';
+                            listHtmlType = 'disc';
+                            content = match[2];
+                        }
+
+                        if (listTag) {
+                            // Cari level indentasi yang sesuai di stack
+                            let parentLevel = -1;
+                            for (let i = listStack.length - 1; i >= 0; i--) {
+                                if (listStack[i].indent < indent) {
+                                    parentLevel = i;
+                                    break;
+                                }
                             }
-                            newHtmlBlocks.push(`<li>${match[2]}</li>\n`);
+                            const targetLevel = parentLevel + 1;
+
+                            // Tutup list yang lebih dalam dari level target
+                            closeListsUntil(targetLevel);
+
+                            // Jika list di level ini belum ada atau tipenya berbeda, buat list baru
+                            if (listStack.length <= targetLevel || listStack[targetLevel]?.type !== listHtmlType) {
+                                // Jika ada list di level ini, tutup dulu
+                                if (listStack.length > targetLevel) {
+                                    closeListsUntil(targetLevel);
+                                }
+                                const typeAttr = listTag === 'ol' ? ` type="${listHtmlType}"` : '';
+                                newHtmlBlocks.push(`<${listTag}${typeAttr}>\n`);
+                                listStack.push({ tag: listTag, type: listHtmlType, indent: indent });
+                            }
+
+                            newHtmlBlocks.push(`<li>${content}</li>\n`);
                         } else {
-                            // Bukan list item, anggap sebagai paragraf
-                            closeCurrentList();
+                            // Bukan list item, tutup semua list yang terbuka
+                            closeListsUntil(0);
                             newHtmlBlocks.push(`<p>${trimmedLine}</p>\n`);
                         }
                     }
                     
-                    closeCurrentList(); // Tutup list yang mungkin masih terbuka
+                    closeListsUntil(0); // Tutup semua list yang mungkin masih terbuka di akhir
                     cleaned = newHtmlBlocks.join('');
-                    
+                    // --- Akhir Perbaikan Total ---
+
                 } else {
                      // Jika sudah <p> atau list, cukup tambahkan newlines untuk keterbacaan
                      cleaned = cleaned.replace(/<\/p>/gi, '</p>\n');
