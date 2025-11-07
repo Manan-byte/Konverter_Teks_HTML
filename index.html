@@ -394,6 +394,16 @@
                 return cleaned.trim();
             }
 
+            // --- BARU: Fungsi untuk mengubah URL menjadi link HTML ---
+            function autoLink(text) {
+                // Regex untuk mendeteksi URL http, https, dan www
+                const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])|(\bwww\.[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+                return text.replace(urlRegex, function(url) {
+                    const fullUrl = url.startsWith('www.') ? 'http://' + url : url;
+                    return `<a href="${fullUrl}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                });
+            }
+
             // --- BARU: Fungsi untuk mengubah teks mentah dengan indentasi menjadi HTML terstruktur ---
             function convertRawTextToStructuredHtml(rawText) {
                 if (!rawText.trim()) return "";
@@ -448,13 +458,15 @@
                             listStack.push({ tag: listTag, type: listHtmlType, indent: indent });
                         }
 
-                        newHtmlBlocks.push(`<li>${content}</li>\n`);
+                        // PERBAIKAN: Terapkan auto-linking pada konten list
+                        newHtmlBlocks.push(`<li>${autoLink(content)}</li>\n`);
                     } else {
                         while (listStack.length > 0) {
                             const listToClose = listStack.pop();
                             newHtmlBlocks.push(`</${listToClose.tag}>\n`);
                         }
-                        newHtmlBlocks.push(`<p>${trimmedLine}</p>\n`);
+                        // PERBAIKAN: Terapkan auto-linking pada paragraf
+                        newHtmlBlocks.push(`<p>${autoLink(trimmedLine)}</p>\n`);
                     }
                 }
 
